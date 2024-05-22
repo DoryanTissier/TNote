@@ -1,0 +1,234 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    background-color: #F1F1F1;
+}
+
+
+
+/* DEBUT - fond et position */
+.fp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    transition: background-image 0.3s ease-in-out;
+}
+/* FIN - fond et position */
+
+
+
+/* DEBUT - design+animation rectangle centrale */
+.formulaire-co {
+    background:rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: .3s ease-in-out;
+    position: relative;
+    bottom: 7%;
+}
+.formulaire-co:hover {
+    transform: scale(1.015);
+}
+/* FIN - design+animation rectangle centrale */
+
+
+
+/* DEBUT - logo */
+.dlogo {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    bottom: 20px;
+    padding: 5px;
+    
+}
+.logo {
+    width : 130px;
+}
+/* FIN - logo */
+
+
+
+/* DEBUT - position de tout le contenue du rectangle (sauf logo) */
+.pos {
+    position: relative;
+    bottom: 25px;
+}
+/* FIN - position de tout le contenue du rectangle (sauf logo) */
+
+
+
+/* DEBUT - choix du profile */
+.choix {
+    font-weight: bold;
+    font-size: 16px;
+    position: relative;
+    top: 15px;
+    color:#333333a2;
+}
+.profile-images .message {
+    display: none;
+    position: absolute;
+    bottom: 82px;
+    left: 130px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 40px;
+}
+.profile-images label:hover .message {
+    display: block;
+}
+.profile-images {
+    text-align: center;
+    position: relative;
+    top: 22px;
+}
+.profile-images .choix-p {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    padding: 10px;
+}
+.profile-images .choix-p:hover {
+    opacity: 1;
+}
+.choix-p {
+    opacity: 0.5;
+}
+input[type="radio"] {
+    display: none;
+}
+input[type="radio"]:checked + img {
+    opacity: 1;
+}
+.admin {
+    position: relative;
+    right: 10px;
+}
+/* FIN - choix du profile */
+
+
+
+/* DEBUT - template Id et MDP(https://uiverse.io/) + modification de ma part */
+.id-mdp {
+    margin-top: 20px;
+    position: relative;
+    top: 10px;
+}
+.id-mdp input {
+    padding: 20px 15px 10px 15px;
+    outline: none;
+    border: none;
+    border-radius: 50px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 16px;
+    font-weight: 550;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 0 0 5px transparent;
+}
+.id-mdp input:hover,
+.id-mdp input:focus {
+    box-shadow: 0 0 0 2px #33333394;
+}
+.id-mdp span {
+    position: absolute;
+    left: 7px;
+    top: 0;
+    padding: 13px 15px;
+    color: #33333394;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s ease-in-out;
+    pointer-events: none;
+}
+.id-mdp input:focus + span,
+.id-mdp input:valid + span {
+    transform: translateY(-12px) translateX(-5px) scale(0.95);
+    transition: 0.3s ease-in-out;
+}
+/* FIN - template Id et MDP(https://uiverse.io/) + modification de ma part */
+
+
+
+/* DEBUT - template bouton (https://uiverse.io/) */
+button {
+    --primary-color: #645bff;
+    --secondary-color: #fff;
+    --hover-color: #111;
+    --arrow-width: 10px;
+    --arrow-stroke: 2px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 50px;
+    color: var(--secondary-color);
+    padding: 0.7em 1.8em;
+    background: var(--primary-color);
+    display: flex;
+    transition: 0.2s background;
+    align-items: center;
+    gap: 0.6em;
+    font-weight: bold;
+    font-size: 20px;
+    position: relative;
+    left: 25px;
+    top: 30px;
+}
+button .arrow-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button .arrow {
+    margin-top: 1px;
+    width: var(--arrow-width);
+    background: var(--primary-color);
+    height: var(--arrow-stroke);
+    position: relative;
+    transition: 0.2s;
+}
+button .arrow::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    border: solid var(--secondary-color);
+    border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+    display: inline-block;
+    top: -3px;
+    right: 3px;
+    transition: 0.2s;
+    padding: 3px;
+    transform: rotate(-45deg);
+}
+button:hover {
+    background-color: var(--hover-color);
+}
+button:hover .arrow {
+    background: var(--secondary-color);
+}
+button:hover .arrow:before {
+    right: 0;
+}
+/* FIN - template bouton (https://uiverse.io/) */
+
+
+
+/* DEBUT - block avec les 2 logo */
+.block-logo {
+    background:rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: .3s ease-in-out;
+    position: relative;
+    top: 7%;
+}
+.block-logo:hover {
+    transform: scale(1.015);
+}
+/* FIN - block avec les 2 logo */
