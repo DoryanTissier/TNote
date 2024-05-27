@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de connexion</title>
-    <link rel="stylesheet" href="../../css/connexion/connexion.css">
+    <link rel="stylesheet" href="../css/connexion/connexion.css">
 </head>
 <body>
 
@@ -15,12 +15,12 @@
 
             <!-- DEBUT logo -->
             <div class="dlogo">
-                <img class="logo" src="../../source/img/logo/logo-nom.png" alt="logo">
+                <img class="logo" src="../source/img/logo/logo-nom.png" alt="logo">
             </div>
             <!-- FIN logo -->
 
             <!-- DEBUT formulaire de connexion -->
-            <form class="pos" action="back-end_connexion.php" method="POST">
+            <form class="pos">
 
                 <!-- DEBUT choix profile -->
                 <div class="type-p">
@@ -29,18 +29,18 @@
                     </label>
                     <div class="profile-images" >
                         <label>
-                            <input type="radio" name="etudiant" value="etudiant" required>
-                            <img class="choix-p" src="../../source/img/profile/e1.png" alt="Étudiant">
+                            <input type="radio" name="type-p" value="etudiant" required>
+                            <img class="choix-p" src="../source/img/profile/e1.png" alt="Étudiant">
                             <span class="message">Étudiant(e)</span>
                         </label>
                         <label>
-                            <input type="radio" name="prof" value="professeur">
-                            <img class="choix-p" src="../../source/img/profile/p1.png" alt="Professeur">
+                            <input type="radio" name="type-p" value="professeur">
+                            <img class="choix-p" src="../source/img/profile/p1.png" alt="Professeur">
                             <span class="message">Professeur(e)</span>
                         </label>
                         <label>
-                            <input type="radio" name="admin" value="admin">
-                            <img class="choix-p" src="../../source/img/profile/admin.png" alt="admin">
+                            <input type="radio" name="type-p" value="admin">
+                            <img class="choix-p" src="../source/img/profile/admin.png" alt="admin">
                             <span class="message">Admin</span>
                         </label>
                     </div>
@@ -49,13 +49,13 @@
 
                 <!-- DEBUT ID et MDP -->
                 <div class="id-mdp">
-                    <input type="text" name="id" placeholder=" " required>
+                    <input type="text" id="identifiant" name="username" placeholder=" " required>
                     <span>
                         Identifiant
                     </span>
                 </div>
                 <div class="id-mdp">
-                    <input type="password" name="mdp" placeholder=" " required>
+                    <input type="password" id="mdp" name="password" placeholder=" " required>
                     <span>
                         Mot de passe
                     </span>
@@ -80,20 +80,15 @@
 
         <!-- DEBUT rectangle 2 -->
         <div class="block-logo">
-            <img src="../../source/img/logo/uge.png" alt="logo universite gustave eiffel" height="50px">
-            <img src="../../source/img/logo/x.png" alt="" height="50px">
-            <img src="../../source/img/logo/logo-nom.png" alt="logo Tnote" height="50px">
+            <img src="../source/img/logo/uge.png" alt="logo universite gustave eiffel" height="50px">
+            <img src="../source/img/logo/x.png" alt="" height="50px">
+            <img src="../source/img/logo/logo-nom.png" alt="logo Tnote" height="50px">
         </div>
          <!-- FIN rectangle 2 -->
 
     </div>
-    <?php
-    if (isset($errorMessage)) {
-        echo "<p>$errorMessage</p>";
-    }
-    ?>
 
-    <script src="../../js/connexion/connexion.js"></script>
+    <script src="../js/connexion.js"></script>
 
 </body>
 </html>
