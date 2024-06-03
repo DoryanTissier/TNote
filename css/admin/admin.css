@@ -1,0 +1,9 @@
+h1 {
+    display: flex;
+    position: relative;
+    left: 13em;
+    top: 6.7em;
+}
+.nom {
+    font-size: 12px;
+}

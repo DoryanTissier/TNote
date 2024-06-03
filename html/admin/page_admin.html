@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>menu</title>
+    <link rel="stylesheet" href="../../css/admin/admin_header.css">
+    <link rel="stylesheet" href="../../css/admin/admin_card.css">
+    <link rel="stylesheet" href="../../css/admin/admin.css">
+</head>
+<body>
+  <!-- Menu -->
+  <div class="header">
+    <div class="dlogo">
+        <img class="logo" src="../../source/img/logo/logo.png" alt="logo">
+    </div>
+    <div class="navbar">
+        <button onclick="window.location.href='page_admin.html'" class="value">Note</button>
+        <button class="value">Profile</button>
+        <button onclick="window.location.href='../connexion/connexion.html'" class="value" id="rouge">Déconnexion</button>
+    </div>
+  </div>
+
+  <h1>MMI1</h1>
+  <!-- Conteneur pour aligner les cartes TD1 et TD2 -->
+  <div class="card-container">
+    <!-- TD1 -->
+    <div class="card" data-popup-id="popup1">
+      <div class="card-text">
+        <p>TD1</p>
+      </div>
+      <div class="card-icons">
+        <button class="card-btn" data-popup-id="popup2"><b>ajouter</b></button>
+      </div>
+    </div>
+    <!-- TD2 -->
+    <div class="card" data-popup-id="popup1">
+      <div class="card-text">
+        <p>TD2</p>
+      </div>
+      <div class="card-icons">
+        <button class="card-btn" data-popup-id="popup2"><b>ajouter</b></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Containers des popups -->
+  <div id="popup1" class="popup">
+    <div class="popup-content">
+      <span class="popup-close">&times;</span>
+      <img src="../../source/img/logo/logo-nom.png" width="200px" alt="">
+    </div>
+  </div>
+
+  <div id="popup2" class="popup">
+    <div class="popup-content">
+      <span class="popup-close">&times;</span>
+      <p>Contenu pour le Popup 2...</p>
+    </div>
+  </div>
+
+  <h1>Professeur(e)s</h1>
+  <!-- Conteneur pour aligner les cartes TD1 et TD2 -->
+  <div class="card-container">
+    <!-- TD1 -->
+    <div class="card" data-popup-id="popup1">
+      <div class="card-text">
+        <p>Anglais<br><b class="nom">Nadia AL SALTI</b></p>
+      </div>
+      <div class="card-icons">
+        <button class="card-btn" data-popup-id="popup2"><b>détails</b></button>
+      </div>
+    </div>
+    <!-- TD2 -->
+    <div class="card" data-popup-id="popup1">
+      <div class="card-text">
+        <p>Culture num<br><b class="nom">Clément SIGALAS</b></p>
+      </div>
+      <div class="card-icons">
+        <button class="card-btn" data-popup-id="popup2"><b>détails</b></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Containers des popups -->
+  <div id="popup1" class="popup">
+    <div class="popup-content">
+      <span class="popup-close">&times;</span>
+      <img src="../../source/img/logo/logo-nom.png" width="200px" alt="">
+    </div>
+  </div>
+
+  <div id="popup2" class="popup">
+    <div class="popup-content">
+      <span class="popup-close">&times;</span>
+      <p>Contenu pour le Popup 2...</p>
+    </div>
+  </div>
+
+  <script src="../../js/admin/card.js"></script>
+</body>
+</html>
+

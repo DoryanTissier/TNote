@@ -1,4 +1,4 @@
-.header_admin {
+.header {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +29,7 @@
   padding: 10px;
   overflow: hidden;
   position: relative;
-  margin-left: 600px;
+  margin-left: 800px;
 }
 
 .value {
@@ -81,3 +81,4 @@
   filter: blur(1px);
   transform: scale(0.95);
 }
+
