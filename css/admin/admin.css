@@ -1,9 +1,25 @@
-h1 {
-    display: flex;
-    position: relative;
-    left: 13em;
-    top: 6.7em;
-}
+
 .nom {
     font-size: 12px;
+}
+.btn_exp {
+    position: relative;
+    bottom: 6.5px;
+    left: 10px;
+    border-radius: 20px;
+    padding: 10px 15px;
+    background-color: #bebebe;
+    border: none;
+    color: white;
+}
+
+.btn_exp:hover {
+    background-color: gray;
+}
+.block {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-top: 10%;
 }

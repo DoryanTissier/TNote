@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 25px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -14,7 +14,7 @@
 }
 
 .logo {
-  width: 80px;
+  width: 180px;
 }
 /* FIN - logo */
 
@@ -22,14 +22,14 @@
   display: flex;
   height: 40px;
   width: 320px;
-  background-color: rgb(190, 190, 190, 0.5);
+  background-color: rgba(190, 190, 190, 0.5);
   justify-content: center;
   border-radius: 10px;
   transition: 1s;
   padding: 10px;
   overflow: hidden;
   position: relative;
-  margin-left: 800px;
+  margin-left: 700px;
 }
 
 .value {
@@ -81,4 +81,5 @@
   filter: blur(1px);
   transform: scale(0.95);
 }
+
 
