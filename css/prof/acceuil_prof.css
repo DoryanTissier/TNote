@@ -11,9 +11,21 @@ body {
     font-family: 'GeorgeRoundedRegular', sans-serif;
 }
 
+/* Styles pour le container principal des cartes */
+.card-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux cartes de retourner à la ligne */
+    align-items: center; /* Centre les cartes verticalement */
+    margin: 0 auto; /* Centre le container */
+    padding: 60px 20px 20px; /* Ajout de padding-top pour espacer avec le header */
+    max-width: 1200px; /* Largeur maximale du container */
+  }
+  
+
 /* Style de la carte */
 .card {
     width: 150px;
+    margin: 10px; /* Marge entre les cartes */
     height: 170px;
     border-radius: 10px;
     background: #ac38ff94;
