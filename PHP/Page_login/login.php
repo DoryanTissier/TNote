@@ -2,70 +2,100 @@
 session_start();
 include 'db_connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $profile_type = $_POST['type-p'];
+$error = null;
 
-    // Vérification du type de profil et de la table associée
-    switch ($profile_type) {
+// Vérifie si l'utilisateur est déjà connecté, auquel cas redirige-le vers la page correspondante au profil
+if (isset($_SESSION['profile_type'])) {
+    switch ($_SESSION['profile_type']) {
         case 'etudiant':
-            $table = 'Profil_etudiant';
-            $id_column = 'ID_Etudiants';
-            break;
+            header("Location: ../../html/etudiant/acceuil_prof.php");
+            exit();
         case 'professeur':
-            $table = 'Profil_prof';
-            $id_column = 'ID_prof';
-            break;
+            header("Location: ../../html/prof/acceuil_prof.php");
+            exit();
         case 'admin':
-            $table = 'Profil_admin';
-            $id_column = 'ID_Admin';
-            break;
-        default:
-            $table = null;
+            header("Location: ../../html/admin/acceuil_prof.php");
+            exit();
     }
+}
 
-    if ($table) {
-        // Extraction du nom et du prénom depuis l'identifiant
-        list($nom, $prenom) = explode('.', $username);
+// Vérifier si un profil a été choisi
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!isset($_POST['type-p'])) {
+        $error = "Veuillez sélectionner un type de profil.";
+    } else {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $profile_type = $_POST['type-p'];
 
-        // Préparation de la requête SQL
-        $sql = "SELECT $id_column, mot_de_Passe FROM $table WHERE nom = :nom AND prenom = :prenom";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['nom' => $nom, 'prenom' => $prenom]);
+        // Vérifier le type de profil et la table associée
+        switch ($profile_type) {
+            case 'etudiant':
+                $table = 'Profil_etudiant';
+                $id_column = 'ID_Etudiants';
+                break;
+            case 'professeur':
+                $table = 'Profil_prof';
+                $id_column = 'ID_prof';
+                break;
+            case 'admin':
+                $table = 'Profil_admin';
+                $id_column = 'ID_Admin';
+                break;
+            default:
+                $table = null;
+        }
 
-        // Vérification du mot de passe
-        $user = $stmt->fetch();
-
-        if ($user) {
-
-            if ($password === $user['mot_de_Passe']) {
-                $_SESSION['user_id'] = $user[$id_column];
-                $_SESSION['profile_type'] = $profile_type;
-                // Remplacer les redirections par des phrases de confirmation
-                switch ($profile_type) {
-                    case 'etudiant':
-                        echo "Connexion réussie en tant qu'étudiant(e)";
-                        break;
-                    case 'professeur':
-                        header("Location: ../../html/prof/acceuil_prof.html");
-                        break;
-                    case 'admin':
-                        echo "Connexion réussie en tant qu'admin";
-                        break;
-                }
-                exit();
+        if ($table) {
+            // Extraction du nom et du prénom depuis l'identifiant
+            $name_parts = explode('.', $username);
+            if (count($name_parts) != 2 || empty($name_parts[0]) || empty($name_parts[1])) {
+                $error = "Format d'identifiant invalide. Utilisez le format 'nom.prenom'.";
             } else {
-                echo "Mot de passe incorrect.";
+                $nom = $name_parts[0];
+                $prenom = $name_parts[1];
+
+                // Préparation de la requête SQL
+                $sql = "SELECT $id_column, mot_de_Passe FROM $table WHERE nom = :nom AND prenom = :prenom";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['nom' => $nom, 'prenom' => $prenom]);
+
+                // Vérification du mot de passe
+                $user = $stmt->fetch();
+
+                if ($user) {
+                    if ($password === $user['mot_de_Passe']) {
+                        // Stocker les informations de session
+                        $_SESSION['user_id'] = $user[$id_column];
+                        $_SESSION['profile_type'] = $profile_type;
+
+                        // Redirection vers la page appropriée
+                        switch ($profile_type) {
+                            case 'etudiant':
+                                header("Location: ../../html/etudiant/acceuil_prof.php");
+                                break;
+                            case 'professeur':
+                                header("Location: ../../html/prof/acceuil_prof.php");
+                                break;
+                            case 'admin':
+                                header("Location: ../../html/admin/acceuil_prof.php");
+                                break;
+                        }
+                        exit();
+                    } else {
+                        $error = "Mot de passe incorrect.";
+                    }
+                } else {
+                    $error = "Identifiant ou mot de passe incorrect.";
+                }
             }
         } else {
-            $error = "Identifiant ou mot de passe incorrect.";
+            $error = "Type de profil invalide.";
         }
-    } else {
-        $error = "Type de profil invalide.";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -87,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </label>
                     <div class="profile-images">
                         <label>
-                            <input type="radio" name="type-p" value="etudiant" required>
+                            <input type="radio" name="type-p" value="etudiant">
                             <img class="choix-p" src="../../source/img/profile/e1.png" alt="Étudiant">
                             <span class="message">Étudiant(e)</span>
                         </label>
@@ -121,11 +151,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="arrow"></div>
                     </div>
                 </button>
-                <?php if (isset($error)): ?>
-                    <p class="error"><?= htmlspecialchars($error) ?></p>
-                <?php endif; ?>
             </form>
         </div>
+        <?php if (isset($error)): ?>
+                    <div class="notification show" id="errorNotification">
+                    <p class="error"><?= htmlspecialchars($error) ?></p>
+                        <span class="close-btn" onclick="closeNotification()">&times;</span>
+                    </div>
+        <?php endif; ?>
+    <!-- DEBUT rectangle 2 -->
+    <div class="block-logo">
+        <img src="../../source/img/logo/uge.png" alt="logo universite gustave eiffel" height="50px">
+        <img src="../../source/img/logo/x.png" alt="" height="50px">
+        <img src="../../source/img/logo/logo-nom.png" alt="logo Tnote" height="50px">
+    </div>
+    <!-- FIN rectangle 2 -->
     </div>
 
     <script src="../../js/connexion/connexion.js"></script>
