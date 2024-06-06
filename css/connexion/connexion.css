@@ -1,3 +1,4 @@
+/* Styles généraux pour le corps de la page */
 body {
     margin: 0;
     padding: 0;
@@ -5,9 +6,7 @@ body {
     background-color: #F1F1F1;
 }
 
-
-
-/* DEBUT - fond et position */
+/* Styles pour le conteneur principal */
 .fp {
     display: flex;
     flex-direction: column;
@@ -16,11 +15,8 @@ body {
     height: 100vh;
     transition: background-image 0.3s ease-in-out;
 }
-/* FIN - fond et position */
 
-
-
-/* DEBUT - design+animation rectangle centrale */
+/* Styles pour le formulaire de connexion */
 .formulaire-co {
     background:rgba(255, 255, 255, 0.8);
     border-radius: 40px;
@@ -30,39 +26,31 @@ body {
     position: relative;
     bottom: 7%;
 }
+
 .formulaire-co:hover {
     transform: scale(1.015);
 }
-/* FIN - design+animation rectangle centrale */
 
-
-
-/* DEBUT - logo */
+/* Styles pour le logo */
 .dlogo {
     display: flex;
     justify-content: center;
     position: relative;
     bottom: 20px;
     padding: 5px;
-    
 }
+
 .logo {
     width : 130px;
 }
-/* FIN - logo */
 
-
-
-/* DEBUT - position de tout le contenue du rectangle (sauf logo) */
+/* Styles pour le contenu du formulaire (sauf le logo) */
 .pos {
     position: relative;
     bottom: 25px;
 }
-/* FIN - position de tout le contenue du rectangle (sauf logo) */
 
-
-
-/* DEBUT - choix du profile */
+/* Styles pour le choix du profil */
 .choix {
     font-weight: bold;
     font-size: 16px;
@@ -70,6 +58,7 @@ body {
     top: 15px;
     color:#333333a2;
 }
+
 .profile-images .message {
     display: none;
     position: absolute;
@@ -80,46 +69,53 @@ body {
     padding: 10px;
     border-radius: 40px;
 }
+
 .profile-images label:hover .message {
     display: block;
 }
+
 .profile-images {
     text-align: center;
     position: relative;
     top: 22px;
 }
+
 .profile-images .choix-p {
     width: 60px;
     height: 60px;
     cursor: pointer;
     padding: 10px;
 }
+
 .profile-images .choix-p:hover {
     opacity: 1;
 }
+
 .choix-p {
     opacity: 0.5;
 }
+
 input[type="radio"] {
     display: none;
 }
+
 input[type="radio"]:checked + img {
     opacity: 1;
 }
+
 .admin {
     position: relative;
     right: 10px;
 }
-/* FIN - choix du profile */
 
-
-
-/* DEBUT - template Id et MDP(https://uiverse.io/) + modification de ma part */
+/* Styles pour le formulaire de connexion */
 .id-mdp {
     margin-top: 20px;
     position: relative;
     top: 10px;
+    z-index: 1; /* Gérer la superposition */
 }
+
 .id-mdp input {
     padding: 20px 15px 10px 15px;
     outline: none;
@@ -132,10 +128,12 @@ input[type="radio"]:checked + img {
     transition: 0.3s ease-in-out;
     box-shadow: 0 0 0 5px transparent;
 }
+
 .id-mdp input:hover,
 .id-mdp input:focus {
     box-shadow: 0 0 0 2px #33333394;
 }
+
 .id-mdp span {
     position: absolute;
     left: 7px;
@@ -147,16 +145,14 @@ input[type="radio"]:checked + img {
     transition: 0.3s ease-in-out;
     pointer-events: none;
 }
+
 .id-mdp input:focus + span,
 .id-mdp input:valid + span {
     transform: translateY(-12px) translateX(-5px) scale(0.95);
     transition: 0.3s ease-in-out;
 }
-/* FIN - template Id et MDP(https://uiverse.io/) + modification de ma part */
 
-
-
-/* DEBUT - template bouton (https://uiverse.io/) */
+/* Styles pour le bouton de connexion */
 button {
     --primary-color: #645bff;
     --secondary-color: #fff;
@@ -179,11 +175,14 @@ button {
     left: 25px;
     top: 30px;
 }
+
+
 button .arrow-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 button .arrow {
     margin-top: 1px;
     width: var(--arrow-width);
@@ -192,6 +191,7 @@ button .arrow {
     position: relative;
     transition: 0.2s;
 }
+
 button .arrow::before {
     content: "";
     box-sizing: border-box;
@@ -205,20 +205,20 @@ button .arrow::before {
     padding: 3px;
     transform: rotate(-45deg);
 }
+
 button:hover {
     background-color: var(--hover-color);
 }
+
 button:hover .arrow {
     background: var(--secondary-color);
 }
+
 button:hover .arrow:before {
     right: 0;
 }
-/* FIN - template bouton (https://uiverse.io/) */
 
-
-
-/* DEBUT - block avec les 2 logo */
+/* Styles pour le bloc avec les 2 logos */
 .block-logo {
     background:rgba(255, 255, 255, 0.8);
     border-radius: 30px;
@@ -228,7 +228,46 @@ button:hover .arrow:before {
     position: relative;
     top: 7%;
 }
+
 .block-logo:hover {
     transform: scale(1.015);
 }
-/* FIN - block avec les 2 logo */
+
+/* Styles pour les notifications d'erreur */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1001; /* Modifié le z-index */
+}
+
+.notification.show {
+    opacity: 1;
+}
+
+.notification .close-btn {
+    margin-left: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Déplacement de la notification en bas à droite */
+.pos {
+    position: relative;
+    bottom: 25px;
+}
+
+/* Styles pour la rendue responsive */
+@media only screen and (max-width: 600px) {
+    /* Ajoutez ici vos styles pour la version mobile */
+}

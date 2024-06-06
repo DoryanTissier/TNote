@@ -10,3 +10,23 @@ document.getElementsByName('type-p').forEach(function(radio) {
         }
     });
 });
+
+// JavaScript pour fermer la notification
+function closeNotification() {
+    var notification = document.getElementById('errorNotification');
+    notification.style.opacity = '0';
+    setTimeout(function() {
+        notification.style.display = 'none';
+    }, 500);
+}
+
+// Disparition automatique des notifications après quelques secondes
+setTimeout(function() {
+    var notification = document.getElementById('errorNotification');
+    if (notification) {
+        notification.style.opacity = '0';
+        setTimeout(function() {
+            notification.style.display = 'none';
+        }, 500);
+    }
+}, 5000);

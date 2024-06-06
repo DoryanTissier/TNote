@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Vérifie si l'utilisateur est connecté
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['profile_type'])) {
+    // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: ../../PHP/Page_login/login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,17 +19,16 @@
   <link rel="stylesheet" href="../../css/prof/acceuil_prof.css">
 </head>
 <body>
-
-  <div class="header">
-    <div class="dlogo">
-        <img class="logo" src="../../source/img/logo/logo-nom.png" alt="logo">
-    </div>
-    <div class="navbar">
-        <button class="value">Note</button>
-        <button class="value">Profile</button>
-        <button class="value" id="rouge">Déconnexion</button>
-    </div>
+<div class="header">
+  <div class="dlogo">
+      <img class="logo" src="../../source/img/logo/logo-nom.png" alt="logo">
   </div>
+  <div class="navbar">
+      <button class="value">Note</button>
+      <button class="value">Profile</button>
+      <a href="../../PHP/Page_login/logout.php" class="value" style="text-decoration: none;">Déconnexion</a>
+  </div>
+</div>
 
  <!-- Container principal pour centrer les cartes -->
 <div class="card-container">
@@ -58,6 +68,6 @@
   </div>
 </div>
 
-  <script src="../../js/prof/acceuil_prof.js"></script>
+<script src="../../js/prof/acceuil_prof.js"></script>
 </body>
 </html>

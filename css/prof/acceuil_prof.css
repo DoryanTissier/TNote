@@ -17,7 +17,7 @@ body {
     flex-wrap: wrap; /* Permet aux cartes de retourner à la ligne */
     align-items: center; /* Centre les cartes verticalement */
     margin: 0 auto; /* Centre le container */
-    padding: 60px 20px 20px; /* Ajout de padding-top pour espacer avec le header */
+    padding: 100px 250px 20px; /* Ajout de padding-top pour espacer avec le header */
     max-width: 1200px; /* Largeur maximale du container */
   }
   
