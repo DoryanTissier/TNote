@@ -4,7 +4,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Wrapper pour les cartes TD1 et TD2 */
+/* Wrapper pour les cartes */
 .card-container {
     display: flex;
     position: relative;
@@ -147,3 +147,4 @@ body {
 .popup-close:focus {
     color: black;
 }
+
