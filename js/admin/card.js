@@ -1,49 +1,39 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Fonction pour ouvrir un popup
-    function openPopup(popupId) {
+document.addEventListener('DOMContentLoaded', () => {
+    const openPopup = (popupId) => {
         const popup = document.getElementById(popupId);
         if (popup) {
             popup.style.display = 'block';
-            setTimeout(() => {
-                popup.classList.add('open');
-            }, 10); // Permet de déclencher la transition
+            setTimeout(() => popup.classList.add('open'), 10);
         }
-    }
+    };
 
-    // Fonction pour fermer un popup
-    function closePopup(popup) {
+    const closePopup = (popup) => {
         popup.classList.remove('open');
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 300); // Durée de la transition définie dans CSS
-    }
+        setTimeout(() => popup.style.display = 'none', 300);
+    };
 
-    // Ajout des événements pour ouvrir les popups via les cartes
-    document.querySelectorAll('.card').forEach(element => {
+    document.querySelectorAll('.card, .aj').forEach(element => {
         element.addEventListener('click', (event) => {
             const popupId = event.currentTarget.getAttribute('data-popup-id');
             openPopup(popupId);
         });
     });
 
-    // Ajout des événements pour ouvrir les popups via les boutons
     document.querySelectorAll('.card-btn').forEach(element => {
         element.addEventListener('click', (event) => {
-            event.stopPropagation(); // Empêche l'événement de se propager à la carte parente
+            event.stopPropagation();
             const popupId = event.currentTarget.getAttribute('data-popup-id');
             openPopup(popupId);
         });
     });
 
-    // Ajout des événements pour fermer les popups
     document.querySelectorAll('.popup-close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', (event) => {
+        closeBtn.addEventListener('click', () => {
             const popup = closeBtn.closest('.popup');
             closePopup(popup);
         });
     });
 
-    // Fermer le popup si on clique en dehors du contenu
     window.addEventListener('click', (event) => {
         document.querySelectorAll('.popup').forEach(popup => {
             if (event.target === popup) {
@@ -52,4 +42,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 });
+
+
 

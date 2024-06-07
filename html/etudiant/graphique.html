@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphique en barres</title>
+    <link rel="stylesheet" href="graphique.css">
+</head>
+<body>
+    <div class="container">
+        <div class="average">
+        </div>
+        <div class="chart-container">
+            <div class="y-axis">
+                <div class="y-tick">20</div>
+                <div class="y-tick">18</div>
+                <div class="y-tick">16</div>
+                <div class="y-tick">14</div>
+                <div class="y-tick">12</div>
+                <div class="y-tick">10</div>
+                <div class="y-tick">8</div>
+                <div class="y-tick">6</div>
+                <div class="y-tick">4</div>
+                <div class="y-tick">2</div>
+                <div class="y-tick">0</div>
+            </div>
+            <div class="chart">
+                <div class="bar" style="height: 80%;" data-matiere="Culture Numérique">80%</div>
+                <div class="bar" style="height: 60%;" data-matiere="PPP">60%</div>
+                <div class="bar" style="height: 40%;" data-matiere="Hébergement">40%</div>
+                <div class="bar" style="height: 90%;" data-matiere="Anglais">90%</div>
+                <div class="bar" style="height: 70%;" data-matiere="Intégration">70%</div>
+            </div>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color increase"></div>
+                <span>Augmentation de la moyenne</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color decrease"></div>
+                <span>Moyenne en baisse</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.bar').forEach(function(bar) {
+            let height = parseInt(bar.style.height);
+            if (height < 50) {
+                bar.classList.add('below-50');
+            }
+        });
+    </script>
+</body>
+</html>
