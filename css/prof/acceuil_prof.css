@@ -148,3 +148,16 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+.popup-header {
+    margin-bottom: 20px;
+}
+
+.popup-header p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.popup-header div {
+    margin-bottom: 10px;
+}
