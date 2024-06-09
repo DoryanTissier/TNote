@@ -19,7 +19,7 @@ error_reporting(E_ALL);
             VOUS AVEZ MODIFIÉ ID : <?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : 'N/A'; ?>
         </div>
     <?php endif; ?>
-    <h1 classe="titre_td_list">TD <?php echo $td_number; ?> - Liste des étudiants</h1>
+    <h1 class="titre_td_list">TD <?php echo $td_number; ?> - Liste des étudiants</h1>
     <table class="main-table">
         <thead>
             <tr>
@@ -80,7 +80,7 @@ error_reporting(E_ALL);
                     
                     $sqlDetails = "SELECT n.note, e.nom_evaluation, e.type_evaluation, e.coefficient 
                                    FROM Note n
-                                   JOIN Évalutation e ON n.id_evaluation = e.id_evaluation
+                                   JOIN Evaluation e ON n.id_evaluation = e.id_evaluation
                                    WHERE n.ID_Etudiants = ?";
                     $stmtDetails = $pdo->prepare($sqlDetails);
                     $stmtDetails->execute([$row['ID_Etudiants']]);

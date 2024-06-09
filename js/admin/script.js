@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const editButton = mainRow.querySelector('.edit');
         editButton.addEventListener('click', (event) => {
             event.stopPropagation(); // Pour empêcher l'événement de clic de se propager
-            window.location.href = `edit_student.php?id=${id}`;
+            openEditPopup(id);
         });
 
         const deleteButton = mainRow.querySelector('.delete');
@@ -50,113 +50,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
 
+    // Fonction pour ouvrir le popup d'édition
+    function openEditPopup(studentId) {
+        fetch(`edit_student.php?id=${studentId}`)
+            .then(response => response.text())
+            .then(data => {
+                const editPopup = document.createElement('div');
+                editPopup.classList.add('popup');
+                editPopup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="popup-close">&times;</span>
+                        <div class="popup-body">${data}</div>
+                    </div>
+                `;
+                document.body.appendChild(editPopup);
 
-document.querySelectorAll('.student-row').forEach(row => {
-    row.addEventListener('click', function() {
-        const studentId = this.getAttribute('data-student-id');
-        fetchStudentDetails(studentId);
-    });
-});
+                // Fermer le popup lorsque le bouton de fermeture est cliqué
+                editPopup.querySelector('.popup-close').addEventListener('click', () => {
+                    document.body.removeChild(editPopup);
+                });
 
-function fetchStudentDetails(studentId) {
-    fetch(`get_student_details.php?id=${studentId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Logique pour afficher les détails de l'étudiant
-            displayStudentDetails(data);
-        })
-        .catch(error => console.error('Erreur:', error));
-}
-
-function displayStudentDetails(data) {
-    const detailsDiv = document.getElementById('student-details');
-    detailsDiv.innerHTML = `
-        <h3>Détails de l'étudiant</h3>
-        <p>Nom: ${data.nom}</p>
-        <p>Prénom: ${data.prenom}</p>
-        <p>Évaluations:</p>
-        <ul>
-            ${data.evaluations.map(eval => `
-                <li>${eval.type}: ${eval.note} (Coefficient: ${eval.coefficient})</li>
-            `).join('')}
-        </ul>
-    `;
-    detailsDiv.style.display = 'block';
-}
-
-document.querySelectorAll('.edit-btn').forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.stopPropagation(); // Empêche le clic de se propager
-        const studentId = this.getAttribute('data-student-id');
-        openEditPopup(studentId);
-    });
-});
-
-function openEditPopup(studentId) {
-    const popup = window.open(`edit_student.php?id=${studentId}`, 'popup', 'width=600,height=400');
-    if (popup) {
-        popup.focus();
-    } else {
-        alert('Veuillez autoriser les popups pour ce site.');
-    }
-}
-
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.stopPropagation(); // Empêche le clic de se propager
-        const studentId = this.getAttribute('data-student-id');
-        const confirmation = confirm("Voulez-vous vraiment supprimer cet étudiant ?");
-        if (confirmation) {
-            deleteStudent(studentId);
-        }
-    });
-});
-
-function deleteStudent(studentId) {
-    fetch('delete_student.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `id=${studentId}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data.includes('success')) {
-            document.querySelector(`.student-row[data-student-id="${studentId}"]`).remove();
-        } else {
-            alert('Erreur lors de la suppression de l'étudiant.');
-        }
-    })
-    .catch(error => console.error('Erreur:', error));
-}
-
-
-document.getElementById('delete-td-btn').addEventListener('click', function() {
-    const confirmation = confirm("Voulez-vous vraiment supprimer ce TD ?");
-    if (confirmation) {
-        deleteTD();
+                // Fermer le popup lorsque l'extérieur du contenu du popup est cliqué
+                window.addEventListener('click', (event) => {
+                    if (event.target === editPopup) {
+                        document.body.removeChild(editPopup);
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
     }
 });
-
-function deleteTD() {
-    fetch('delete_td.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `td_id=1` // Vous pouvez ajuster cette valeur selon la manière dont vous identifiez le TD
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data.includes('success')) {
-            alert('TD supprimé avec succès.');
-            window.location.href = 'page_admin.php'; // Redirection vers la page admin
-        } else {
-            alert('Erreur lors de la suppression du TD.');
-        }
-    })
-    .catch(error => console.error('Erreur:', error));
-}

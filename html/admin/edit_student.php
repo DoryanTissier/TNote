@@ -21,9 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     }
 
     // Requête pour récupérer les ressources associées à l'étudiant
-    $sql_ressources = "SELECT r.num_ressource, r.nom AS nom_ressource FROM Liaison_ressources_etudiant lre
-                       JOIN Ressources r ON lre.num_ressource = r.num_ressource
-                       WHERE lre.id_etudiant = ?";
+    $sql_ressources = "SELECT r.num_ressource, r.nom AS nom_ressource 
+                       FROM Liaison_ressources_prof lrp
+                       JOIN Ressources r ON lrp.num_ressource = r.num_ressource
+                       WHERE lrp.id_prof = ?";
     $stmt_ressources = $pdo->prepare($sql_ressources);
     $stmt_ressources->execute([$id]);
     $ressources_associees = [];
@@ -32,9 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     }
 
     // Requête pour récupérer les SAE associées à l'étudiant
-    $sql_sae = "SELECT ls.nom_SAE FROM Liaison_SAE_etudiant lse
-                JOIN SAE ls ON lse.nom_SAE = ls.nom_SAE
-                WHERE lse.id_etudiant = ?";
+    $sql_sae = "SELECT ls.nom_SAE 
+                FROM Liaison_SAE_prof lsp
+                JOIN SAE ls ON lsp.nom_SAE = ls.nom_SAE
+                WHERE lsp.id_prof = ?";
     $stmt_sae = $pdo->prepare($sql_sae);
     $stmt_sae->execute([$id]);
     $sae_associees = [];

@@ -14,7 +14,7 @@ if (isset($_SESSION['profile_type'])) {
             header("Location: ../../html/prof/acceuil_prof.php");
             exit();
         case 'admin':
-            header("Location: ../../html/admin/acceuil_prof.php");
+            header("Location: ../../html/admin/page_admin.php");
             exit();
     }
 }
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 header("Location: ../../html/prof/acceuil_prof.php");
                                 break;
                             case 'admin':
-                                header("Location: ../../html/admin/acceuil_prof.php");
+                                header("Location: ../../html/admin/page_admin.php");
                                 break;
                         }
                         exit();
