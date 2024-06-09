@@ -95,8 +95,81 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
                 <div class="popup-content">
                     <span class="popup-close">&times;</span>
                     <p>Modifier les notes pour la ressource: <?= htmlspecialchars($ressource['nom']) ?></p>
+                    <div class="evaluation-list">
+                        <?php
+                        // Requête pour récupérer les évaluations liées à la ressource
+                        $sql_evaluations = "SELECT * FROM Evaluation WHERE num_ressource = :num_ressource";
+                        $stmt_evaluations = $pdo->prepare($sql_evaluations);
+                        $stmt_evaluations->execute(['num_ressource' => $ressource['num_ressource']]);
+                        $evaluations = $stmt_evaluations->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($evaluations as $evaluation):
+                            echo '<div class="evaluation">';
+                            echo '<h3>' . htmlspecialchars($evaluation['nom_evaluation']) . '</h3>';
+
+                            // Ajout des boutons modifier et supprimer
+                            echo '<button class="modify-evaluation" data-evaluation-id="' . $evaluation['id_evaluation'] . '">Modifier</button>';
+                            echo '<form action="supp_note.php" method="POST" style="display:inline;">';
+                            echo '<input type="hidden" name="id_evaluation" value="' . $evaluation['id_evaluation'] . '">';
+                            echo '<button type="submit" class="delete-evaluation" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette évaluation ?\');">Supprimer</button>';
+                            echo '</form>';
+
+                            // Requête pour récupérer les notes des étudiants par évaluation
+                            $sql_notes = "SELECT E.ID_Etudiants, E.nom, E.prenom, G.numero_TD, G.lettre_TP, N.note 
+                                        FROM Note N
+                                        JOIN Profil_etudiant E ON N.ID_Etudiants = E.ID_Etudiants
+                                        JOIN Groupe G ON E.ID_groupe = G.ID_groupe
+                                        WHERE N.id_evaluation = :id_evaluation
+                                        ORDER BY G.numero_TD, G.lettre_TP, E.nom";
+                            $stmt_notes = $pdo->prepare($sql_notes);
+                            $stmt_notes->execute(['id_evaluation' => $evaluation['id_evaluation']]);
+                            $notes = $stmt_notes->fetchAll(PDO::FETCH_ASSOC);
+
+                            $tds = [];
+                            foreach ($notes as $note) {
+                                $td = $note['numero_TD'];
+                                $tp = $note['lettre_TP'];
+                                if (!isset($tds[$td])) {
+                                    $tds[$td] = [];
+                                }
+                                if (!isset($tds[$td][$tp])) {
+                                    $tds[$td][$tp] = ['notes' => [], 'count' => 0, 'sum' => 0];
+                                }
+                                if ($note['note'] !== null) {
+                                    $tds[$td][$tp]['notes'][] = $note['note'];
+                                    $tds[$td][$tp]['count']++;
+                                    $tds[$td][$tp]['sum'] += $note['note'];
+                                }
+                            }
+
+                            foreach ($tds as $td => $tps) {
+                                $td_displayed = false;
+                                foreach ($tps as $tp => $data) {
+                                    if ($data['count'] > 0) {
+                                        if (!$td_displayed) {
+                                            echo '<div class="td"><h4>TD' . htmlspecialchars($td) . '</h4>';
+                                            $td_displayed = true;
+                                        }
+                                        $average = $data['sum'] / $data['count'];
+                                        echo '<div class="tp">';
+                                        echo '<h5>TP' . htmlspecialchars($tp) . '</h5>';
+                                        echo '<p>Moyenne: ' . round($average, 2) . '</p>';
+                                        echo '</div>';
+                                    }
+                                }
+                                if ($td_displayed) {
+                                    echo '</div>';
+                                }
+                            }
+
+                            echo '</div>';
+                        endforeach;
+                        ?>
+                    </div>
                 </div>
             </div>
+
+        
 
             <!-- Popup pour ajouter des notes -->
             <div id="popup-add-<?= $ressource['num_ressource'] ?>" class="popup">
@@ -116,6 +189,7 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
                             <div>
                                 <label for="saes-<?= $ressource['num_ressource'] ?>">SAE: </label>
                                 <select id="saes-<?= $ressource['num_ressource'] ?>" name="nom_SAE">
+                                    <option value="">Sélectionnez une SAE</option>
                                     <?php foreach ($saes as $sae): ?>
                                         <option value="<?= $sae['nom_SAE'] ?>"><?= htmlspecialchars($sae['nom_SAE']) ?></option>
                                     <?php endforeach; ?>
@@ -195,11 +269,82 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Popup pour modifier les notes ajoutées -->
             <div id="popup-modify-<?= $sae['nom_SAE'] ?>" class="popup">
-                <div class="popup-content">
-                    <span class="popup-close">&times;</span>
-                    <p>Modifier les notes pour la SAE: <?= htmlspecialchars($sae['nom_SAE']) ?></p>
+                    <div class="popup-content">
+                        <span class="popup-close">&times;</span>
+                        <p>Modifier les notes pour la SAE: <?= htmlspecialchars($sae['nom_SAE']) ?></p>
+                        <div class="evaluation-list">
+                            <?php
+                            // Requête pour récupérer les évaluations liées à la SAE
+                            $sql_evaluations = "SELECT * FROM Evaluation WHERE nom_SAE = :nom_SAE";
+                            $stmt_evaluations = $pdo->prepare($sql_evaluations);
+                            $stmt_evaluations->execute(['nom_SAE' => $sae['nom_SAE']]);
+                            $evaluations = $stmt_evaluations->fetchAll(PDO::FETCH_ASSOC);
+
+                            foreach ($evaluations as $evaluation):
+                                echo '<div class="evaluation">';
+                                echo '<h3>' . htmlspecialchars($evaluation['nom_evaluation']) . '</h3>';
+
+                                // Ajout des boutons modifier et supprimer
+                                echo '<button class="modify-evaluation" data-evaluation-id="' . $evaluation['id_evaluation'] . '">Modifier</button>';
+                                echo '<form action="supp_note.php" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="id_evaluation" value="' . $evaluation['id_evaluation'] . '">';
+                                echo '<button type="submit" class="delete-evaluation" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette évaluation ?\');">Supprimer</button>';
+                                echo '</form>';
+
+                                // Requête pour récupérer les notes des étudiants par évaluation
+                                $sql_notes = "SELECT E.ID_Etudiants, E.nom, E.prenom, G.numero_TD, G.lettre_TP, N.note 
+                                            FROM Note N
+                                            JOIN Profil_etudiant E ON N.ID_Etudiants = E.ID_Etudiants
+                                            JOIN Groupe G ON E.ID_groupe = G.ID_groupe
+                                            WHERE N.id_evaluation = :id_evaluation
+                                            ORDER BY G.numero_TD, G.lettre_TP, E.nom";
+                                $stmt_notes = $pdo->prepare($sql_notes);
+                                $stmt_notes->execute(['id_evaluation' => $evaluation['id_evaluation']]);
+                                $notes = $stmt_notes->fetchAll(PDO::FETCH_ASSOC);
+
+                                $tds = [];
+                                foreach ($notes as $note) {
+                                    $td = $note['numero_TD'];
+                                    $tp = $note['lettre_TP'];
+                                    if (!isset($tds[$td])) {
+                                        $tds[$td] = [];
+                                    }
+                                    if (!isset($tds[$td][$tp])) {
+                                        $tds[$td][$tp] = ['notes' => [], 'count' => 0, 'sum' => 0];
+                                    }
+                                    if ($note['note'] !== null) {
+                                        $tds[$td][$tp]['notes'][] = $note['note'];
+                                        $tds[$td][$tp]['count']++;
+                                        $tds[$td][$tp]['sum'] += $note['note'];
+                                    }
+                                }
+
+                                foreach ($tds as $td => $tps) {
+                                    $td_displayed = false;
+                                    foreach ($tps as $tp => $data) {
+                                        if ($data['count'] > 0) {
+                                            if (!$td_displayed) {
+                                                echo '<div class="td"><h4>TD' . htmlspecialchars($td) . '</h4>';
+                                                $td_displayed = true;
+                                            }
+                                            $average = $data['sum'] / $data['count'];
+                                            echo '<div class="tp">';
+                                            echo '<h5>TP' . htmlspecialchars($tp) . '</h5>';
+                                            echo '<p>Moyenne: ' . round($average, 2) . '</p>';
+                                            echo '</div>';
+                                        }
+                                    }
+                                    if ($td_displayed) {
+                                        echo '</div>';
+                                    }
+                                }
+
+                                echo '</div>';
+                            endforeach;
+                            ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
             <!-- Popup pour ajouter des notes -->
             <div id="popup-add-<?= $sae['nom_SAE'] ?>" class="popup">
@@ -224,15 +369,15 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div>
                                 <label for="nom_evaluation-<?= $sae['nom_SAE'] ?>">Nom de l'évaluation:</label>
-                                <input type="text" id="nom_evaluation-<?= $sae['nom_SAE'] ?>" name="nom_evaluation" require>
+                                <input type="text" id="nom_evaluation-<?= $sae['nom_SAE'] ?>" name="nom_evaluation">
                             </div>
                             <div>
                                 <label for="date_jour-<?= $sae['nom_SAE'] ?>">Date de l'évaluation:</label>
-                                <input type="date" id="date_jour-<?= $sae['nom_SAE'] ?>" name="date_jour" require>
+                                <input type="date" id="date_jour-<?= $sae['nom_SAE'] ?>" name="date_jour">
                             </div>
                             <div>
                                 <label for="coefficient-<?= $sae['nom_SAE'] ?>">Coefficient:</label>
-                                <input type="number" id="coefficient-<?= $sae['nom_SAE'] ?>" name="coefficient" require>
+                                <input type="number" id="coefficient-<?= $sae['nom_SAE'] ?>" name="coefficient">
                             </div>
                             <input type="hidden" name="ID_prof" value="<?= $id_prof ?>">
                         </div>
@@ -274,20 +419,6 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <?php endforeach; ?>
     </div>
-<?php if (isset($_GET['error'])): ?>
-    <div class="notification show" id="errorNotification">
-        <p class="error"><?= htmlspecialchars($_GET['error']) ?></p>
-        <span class="close-btn" onclick="closeNotification()">&times;</span>
-    </div>
-<?php endif; ?>
-
-<?php if (isset($_GET['success'])): ?>
-    <div class="notification show" id="successNotification">
-        <p class="success">Les données ont été insérées avec succès.</p>
-        <span class="close-btn" onclick="closeNotification()">&times;</span>
-    </div>
-<?php endif; ?>
-
 <script src="../../js/prof/acceuil_prof.js"></script>
 </body>
 </html>

@@ -19,8 +19,7 @@ body {
     margin: 0 auto; /* Centre le container */
     padding: 100px 250px 20px; /* Ajout de padding-top pour espacer avec le header */
     max-width: 1200px; /* Largeur maximale du container */
-  }
-  
+}
 
 /* Style de la carte */
 .card {
@@ -162,8 +161,6 @@ body {
     margin-bottom: 10px;
 }
 
-
-/* Style de la popuptable */
 .popup-table {
     overflow-x: auto;
     margin-top: 20px;
@@ -208,38 +205,82 @@ body {
     margin: auto;
 }
 
-
-/* Styles pour les notifications */
-.notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: white;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 1001;
+/* Styles pour l'affichage des évaluations */
+.evaluation-list {
+    margin-top: 20px;
 }
 
-.notification.show {
-    opacity: 1;
+.evaluation {
+    border: 1px solid #cb88fc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9f9f9;
 }
 
-.notification .close-btn {
-    margin-left: 20px;
+.evaluation h3 {
+    background: #cb88fc;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.td {
+    margin-top: 15px;
+}
+
+.td h4 {
+    background: #e0b8ff;
+    color: #000;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 0;
+    font-size: 18px;
+}
+
+.tp {
+    margin-top: 10px;
+    padding-left: 15px;
+}
+
+.tp h5 {
+    color: #cb88fc;
+    margin: 0;
+    font-size: 16px;
+}
+
+.tp p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Styles pour les boutons de modification et de suppression */
+.evaluation button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
-    font-weight: bold;
 }
 
-.notification.error {
-    background-color: #f44336; /* Red */
+.modify-evaluation {
+    background-color: #4CAF50; /* Vert */
+    color: white;
 }
 
-.notification.success {
-    background-color: #4CAF50; /* Green */
+.delete-evaluation {
+    background-color: #f44336; /* Rouge */
+    color: white;
+}
+
+.modify-evaluation:hover {
+    background-color: #45a049;
+}
+
+.delete-evaluation:hover {
+    background-color: #e53935;
 }

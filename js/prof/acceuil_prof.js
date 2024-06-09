@@ -82,25 +82,3 @@ class Popup {
 document.addEventListener('DOMContentLoaded', () => {
     new Popup();
 });
-
-// JavaScript pour fermer la notification
-function closeNotification() {
-    var notifications = document.querySelectorAll('.notification');
-    notifications.forEach(function(notification) {
-        notification.style.opacity = '0';
-        setTimeout(function() {
-            notification.style.display = 'none';
-        }, 500);
-    });
-}
-
-// Disparition automatique des notifications après quelques secondes
-setTimeout(function() {
-    var notifications = document.querySelectorAll('.notification');
-    notifications.forEach(function(notification) {
-        notification.style.opacity = '0';
-        setTimeout(function() {
-            notification.style.display = 'none';
-        }, 500);
-    });
-}, 5000);

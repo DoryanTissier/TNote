@@ -46,20 +46,12 @@ try {
         }
     }
 
-    // Redirection avec succès
-    header("Location: acceuil_prof.php?success=1");
-    exit();
+    header("Location: acceuil_prof.php"); // Rediriger vers la page d'accueil
 } catch (Exception $e) {
     // Gestion des erreurs
-    $error = "Erreur : " . $e->getMessage();
+    echo "Erreur : " . $e->getMessage();
 } catch (PDOException $e) {
     // Gestion des erreurs PDO
-    $error = "Erreur de base de données : " . $e->getMessage();
-}
-
-// Si une erreur est attrapée, redirection avec message d'erreur
-if (isset($error)) {
-    header("Location: acceuil_prof.php?error=" . urlencode($error));
-    exit();
+    echo "Erreur de base de données : " . $e->getMessage();
 }
 ?>
