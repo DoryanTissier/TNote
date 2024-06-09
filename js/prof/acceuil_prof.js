@@ -2,6 +2,7 @@ class Popup {
     constructor() {
         this.addGlobalEventListeners();
         this.addCardEventListeners();
+        this.addSelectAllEventListeners(); // Ajout de la méthode pour les checkboxes de sélection globale
     }
 
     addGlobalEventListeners() {
@@ -38,11 +39,35 @@ class Popup {
         });
     }
 
+    addSelectAllEventListeners() {
+        // Sélectionner tous les étudiants par TD
+        document.querySelectorAll('.select-all-td').forEach(tdCheckbox => {
+            tdCheckbox.addEventListener('change', function() {
+                const td = this.dataset.td;
+                document.querySelectorAll(`.presence-checkbox[data-td="${td}"]`).forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+        });
+
+        // Sélectionner tous les étudiants par TP
+        document.querySelectorAll('.select-all-tp').forEach(tpCheckbox => {
+            tpCheckbox.addEventListener('change', function() {
+                const tp = this.dataset.tp;
+                const td = this.dataset.td;
+                document.querySelectorAll(`.presence-checkbox[data-tp="${tp}"][data-td="${td}"]`).forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+        });
+    }
+
     openPopup(popupId) {
         const popup = document.getElementById(popupId);
         if (popup) {
             popup.style.display = 'block';
             setTimeout(() => popup.classList.add('open'), 10);
+            this.addSelectAllEventListeners(); // Assurez-vous d'ajouter les écouteurs d'événements après l'ouverture de la popup
         }
     }
 
@@ -57,3 +82,25 @@ class Popup {
 document.addEventListener('DOMContentLoaded', () => {
     new Popup();
 });
+
+// JavaScript pour fermer la notification
+function closeNotification() {
+    var notifications = document.querySelectorAll('.notification');
+    notifications.forEach(function(notification) {
+        notification.style.opacity = '0';
+        setTimeout(function() {
+            notification.style.display = 'none';
+        }, 500);
+    });
+}
+
+// Disparition automatique des notifications après quelques secondes
+setTimeout(function() {
+    var notifications = document.querySelectorAll('.notification');
+    notifications.forEach(function(notification) {
+        notification.style.opacity = '0';
+        setTimeout(function() {
+            notification.style.display = 'none';
+        }, 500);
+    });
+}, 5000);

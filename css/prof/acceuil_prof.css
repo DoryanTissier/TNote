@@ -161,3 +161,85 @@ body {
 .popup-header div {
     margin-bottom: 10px;
 }
+
+
+/* Style de la popuptable */
+.popup-table {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.popup-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.popup-table th, .popup-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.popup-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.popup-table .td-header {
+    background-color: #e0e0e0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.popup-table .tp-header {
+    background-color: #d0d0d0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.popup-table input[type="number"] {
+    width: 100%;
+}
+
+.popup-table input[type="checkbox"] {
+    display: block;
+    margin: auto;
+}
+
+
+/* Styles pour les notifications */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1001;
+}
+
+.notification.show {
+    opacity: 1;
+}
+
+.notification .close-btn {
+    margin-left: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.notification.error {
+    background-color: #f44336; /* Red */
+}
+
+.notification.success {
+    background-color: #4CAF50; /* Green */
+}

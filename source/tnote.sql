@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 03 juin 2024 à 22:38
+-- Généré le : dim. 09 juin 2024 à 18:34
 -- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Version de PHP : 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,34 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `tnote`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `evaluation`
+--
+
+CREATE TABLE `evaluation` (
+  `id_evaluation` int(11) NOT NULL,
+  `type_evaluation` varchar(255) DEFAULT NULL,
+  `coefficient` float DEFAULT NULL,
+  `nom_evaluation` varchar(255) DEFAULT NULL,
+  `date_jour` date DEFAULT NULL,
+  `ID_prof` int(11) DEFAULT NULL,
+  `num_ressource` int(11) DEFAULT NULL,
+  `nom_SAE` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `evaluation`
+--
+
+INSERT INTO `evaluation` (`id_evaluation`, `type_evaluation`, `coefficient`, `nom_evaluation`, `date_jour`, `ID_prof`, `num_ressource`, `nom_SAE`) VALUES
+(1, 'SAE', 1.5, 'Evaluation SAE 101', '2023-09-15', 1, NULL, '101'),
+(2, 'Ressource', 2, 'Evaluation Ressource Hébergement', '2023-10-10', 13, 1, NULL),
+(3, 'SAE', 1, 'Evaluation SAE 102', '2023-11-20', 2, NULL, '102'),
+(4, 'Ressource', 1.8, 'Evaluation Ressource Culture Numérique', '2023-12-05', 12, 2, NULL),
+(5, 'SAE', 2.5, 'Evaluation SAE 103', '2024-01-10', 3, NULL, '103');
 
 -- --------------------------------------------------------
 
@@ -63,6 +91,7 @@ CREATE TABLE `liaison_ressources_prof` (
 --
 
 INSERT INTO `liaison_ressources_prof` (`id_prof`, `num_ressource`) VALUES
+(1, 7),
 (1, 11),
 (2, 10),
 (4, 9),
@@ -820,37 +849,18 @@ INSERT INTO `ue` (`nom_UE`, `coefficient`) VALUES
 ('Entrepreneur', 1),
 ('Exprimer', 1);
 
--- --------------------------------------------------------
-
---
--- Structure de la table `évalutation`
---
-
-CREATE TABLE `évalutation` (
-  `id_evaluation` int(11) NOT NULL,
-  `type_evaluation` varchar(255) DEFAULT NULL,
-  `coefficient` float DEFAULT NULL,
-  `nom_evaluation` varchar(255) DEFAULT NULL,
-  `date_jour` date DEFAULT NULL,
-  `ID_prof` int(11) DEFAULT NULL,
-  `num_ressource` int(11) DEFAULT NULL,
-  `nom_SAE` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `évalutation`
---
-
-INSERT INTO `évalutation` (`id_evaluation`, `type_evaluation`, `coefficient`, `nom_evaluation`, `date_jour`, `ID_prof`, `num_ressource`, `nom_SAE`) VALUES
-(1, 'SAE', 1.5, 'Evaluation SAE 101', '2023-09-15', 1, NULL, '101'),
-(2, 'Ressource', 2, 'Evaluation Ressource Hébergement', '2023-10-10', 13, 1, NULL),
-(3, 'SAE', 1, 'Evaluation SAE 102', '2023-11-20', 2, NULL, '102'),
-(4, 'Ressource', 1.8, 'Evaluation Ressource Culture Numérique', '2023-12-05', 12, 2, NULL),
-(5, 'SAE', 2.5, 'Evaluation SAE 103', '2024-01-10', 3, NULL, '103');
-
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `evaluation`
+--
+ALTER TABLE `evaluation`
+  ADD PRIMARY KEY (`id_evaluation`),
+  ADD KEY `ID_prof` (`ID_prof`),
+  ADD KEY `num_ressource` (`num_ressource`),
+  ADD KEY `nom_SAE` (`nom_SAE`);
 
 --
 -- Index pour la table `groupe`
@@ -925,17 +935,14 @@ ALTER TABLE `ue`
   ADD PRIMARY KEY (`nom_UE`);
 
 --
--- Index pour la table `évalutation`
---
-ALTER TABLE `évalutation`
-  ADD PRIMARY KEY (`id_evaluation`),
-  ADD KEY `ID_prof` (`ID_prof`),
-  ADD KEY `num_ressource` (`num_ressource`),
-  ADD KEY `nom_SAE` (`nom_SAE`);
-
---
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `evaluation`
+--
+ALTER TABLE `evaluation`
+  MODIFY `id_evaluation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `groupe`
@@ -968,14 +975,16 @@ ALTER TABLE `ressources`
   MODIFY `num_ressource` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT pour la table `évalutation`
---
-ALTER TABLE `évalutation`
-  MODIFY `id_evaluation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `evaluation`
+--
+ALTER TABLE `evaluation`
+  ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`ID_prof`) REFERENCES `profil_prof` (`ID_prof`),
+  ADD CONSTRAINT `evaluation_ibfk_2` FOREIGN KEY (`num_ressource`) REFERENCES `ressources` (`num_ressource`),
+  ADD CONSTRAINT `evaluation_ibfk_3` FOREIGN KEY (`nom_SAE`) REFERENCES `sae` (`nom_SAE`);
 
 --
 -- Contraintes pour la table `liaison_ressources_prof`
@@ -1002,7 +1011,7 @@ ALTER TABLE `liaison_sae_ue`
 -- Contraintes pour la table `note`
 --
 ALTER TABLE `note`
-  ADD CONSTRAINT `note_ibfk_1` FOREIGN KEY (`id_evaluation`) REFERENCES `évalutation` (`id_evaluation`),
+  ADD CONSTRAINT `note_ibfk_1` FOREIGN KEY (`id_evaluation`) REFERENCES `evaluation` (`id_evaluation`),
   ADD CONSTRAINT `note_ibfk_2` FOREIGN KEY (`ID_Etudiants`) REFERENCES `profil_etudiant` (`ID_Etudiants`);
 
 --
@@ -1016,14 +1025,6 @@ ALTER TABLE `profil_etudiant`
 --
 ALTER TABLE `ressources`
   ADD CONSTRAINT `ressources_ibfk_1` FOREIGN KEY (`nom_UE`) REFERENCES `ue` (`nom_UE`);
-
---
--- Contraintes pour la table `évalutation`
---
-ALTER TABLE `évalutation`
-  ADD CONSTRAINT `évalutation_ibfk_1` FOREIGN KEY (`ID_prof`) REFERENCES `profil_prof` (`ID_prof`),
-  ADD CONSTRAINT `évalutation_ibfk_2` FOREIGN KEY (`num_ressource`) REFERENCES `ressources` (`num_ressource`),
-  ADD CONSTRAINT `évalutation_ibfk_3` FOREIGN KEY (`nom_SAE`) REFERENCES `sae` (`nom_SAE`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
