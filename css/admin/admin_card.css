@@ -1,18 +1,23 @@
 /* Définition des polices et du style global */
 body {
     background-color: #f5f5f7;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 /* Wrapper pour les cartes */
 .card-container {
     display: flex;
-    position: relative;
+    flex-wrap: wrap;
+}
+.nom {
+    font-size: 12px;
+    opacity: 0.6;
 }
 
 /* Style de la carte et de la carte ajoutée */
 .card, .aj {
-    width: 150px;
+    flex: 1 1 calc(16.66% - 40px); /* Ajustement pour avoir 6 cartes par ligne avec un espacement */
+    max-width: 150px;
     height: 170px;
     border-radius: 10px;
     background: rgba(190, 190, 190, 0.58);
@@ -21,7 +26,7 @@ body {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 10px;
     transition: background-color 0.3s ease;
 }
 
@@ -63,8 +68,7 @@ body {
 
 /* Style du texte de la carte */
 .card-text {
-    flex-grow: 1;
-    padding: 5%;
+    padding: 0 5% 0 5%;
     display: flex;
     flex-direction: column;
     color: rgb(0, 0, 0);
@@ -73,24 +77,35 @@ body {
     word-break: break-all;
     white-space: normal;
     font-size: 20px;
+    overflow: hidden;
+    position: relative;
+    bottom: 15px;
+}
+#card-text {
+    position: relative;
+    left: 10px;
+    font-size: 35px;
 }
 
 /* Style des icônes de la carte */
 .card-icons {
     display: flex;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
-    width: 150px;
+    width: 100%;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
+    margin-top: auto;
+    height: 45px; /* Fixe la hauteur */
+    background-color: rgba(190, 190, 190, 0.58); /* Assure que le fond est le même */
 }
 
 /* Style des boutons de la carte */
 .card-btn {
     border: none;
     padding: 2% 0;
-    width: 150px;
-    height: 45px;
+    width: 100%;
+    height: 100%; /* S'assure que le bouton prend toute la hauteur disponible */
     background-color: rgba(190, 190, 190, 0.58);
     display: flex;
     align-items: center;
@@ -146,5 +161,6 @@ body {
 .popup-close:hover,
 .popup-close:focus {
     color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
-

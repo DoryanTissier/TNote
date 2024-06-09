@@ -15,7 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.card, .aj').forEach(element => {
         element.addEventListener('click', (event) => {
             const popupId = event.currentTarget.getAttribute('data-popup-id');
-            openPopup(popupId);
+            const tdNumber = event.currentTarget.getAttribute('data-td-number');
+            if (tdNumber) {
+                fetch(`td1.php?td_number=${tdNumber}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('td-popup-content').innerHTML = data;
+                        openPopup(popupId);
+                    });
+            } else {
+                openPopup(popupId);
+            }
         });
     });
 
@@ -42,6 +52,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-

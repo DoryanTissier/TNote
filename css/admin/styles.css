@@ -1,0 +1,123 @@
+.body_details_td {
+    position: relative;
+    left: 100px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+thead tr {
+    background-color: rgb(190, 190, 190, 0.8);
+}
+
+th, td {
+    padding: 10px;
+    border: 2px solid #000;
+    text-align: center;
+}
+
+.main-table th {
+    background-color: #ddd;
+    color: #000;
+}
+
+.main-row {
+    background-color: #f9f9f9;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #ffffff;
+    background-color: rgb(190, 190, 190, 0.3);
+    position: relative;
+    bottom: 12px;
+}
+
+.detail-row.hidden {
+    display: none;
+}
+
+.detail-row td {
+    border: 1px solid #ffffff;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+.detail-row td:nth-child(1){
+    width: 40%;
+}
+.detail-row td:nth-child(2){
+    width: 20%;
+}
+
+
+.actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.actions .edit::before {
+    content: "\270E"; /* Pictogramme de crayon */
+}
+
+.actions .delete::before {
+    content: "\1F5D1"; /* Pictogramme de corbeille */
+}
+
+.actions .dropdown::before {
+    content: "\25BC"; /* Pictogramme de flèche vers le bas */
+}
+
+.actions .up::before {
+    content: "\25B2"; /* Pictogramme de flèche vers le haut */
+}
+
+.actions button:focus {
+    outline: none;
+}
+
+.main-row:hover {
+    background-color: rgb(190, 190, 190, 0.3);
+    transition: 0.3s ease-in-out;
+}
+
+.success-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    z-index: 1000;
+}
+
+.success-message.hide {
+    opacity: 0;
+}
+
+.titre_td_list{
+    text-align: center;
+}

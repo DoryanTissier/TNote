@@ -32,7 +32,8 @@
 .input-aj-td-prof-etudiant span {
     position: absolute;
     left: 7px;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     padding: 15px 15px;
     color: #33333394;
     font-size: 16px;
@@ -41,12 +42,18 @@
     pointer-events: none;
 }
 .input-aj-td-prof-etudiant input:focus + span,
-.input-aj-td-prof-etudiant input:valid + span {
-    transform: translateY(-12px) translateX(-5px) scale(0.95);
+.input-aj-td-prof-etudiant input:valid + span,
+.input-aj-td-prof-etudiant input.not-empty + span {
+    transform: translateY(-35px) translateX(-5px) scale(0.95);
+    transition: 0.3s ease-in-out;
+}
+
+/* Ajout d'un style spécifique pour les champs en lecture seule */
+.input-aj-td-prof-etudiant input[readonly] + span {
+    transform: translateY(-35px) translateX(-5px) scale(0.95);
     transition: 0.3s ease-in-out;
 }
 /* FIN - template Id et MDP(https://uiverse.io/) + modification de ma part */
-
 
 .aj-td-btn-ajouter, .aj-td-btn-effacer {
     position: relative;
@@ -66,7 +73,7 @@
     align-items: center;
     justify-content: center;
 }
-.block-aj-td{
+.block-aj-td {
     max-width: 1000px;
     margin: 20px auto;
     padding-left: 40px;
@@ -83,13 +90,15 @@
 
 .block-selection {
     position: relative;
-    margin: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
     border-radius: 30px;
     padding: 10px;
     background-color: #bebebe;
     border: none;
     color: white;
     font-size: 20px;
+    max-width: 310px;
 }
 .dropdown-toggle {
     display: none;
@@ -130,14 +139,10 @@
 .ressources {
     padding-right: 200px;
     padding-left: 10px;
-    padding-top: 9px;
-    padding-bottom: 10px;
 }
 .sae {
     padding-right: 270px;
     padding-left: 10px;
-    padding-top: 9px;
-    padding-bottom: 10px;
 }
 
 .dropdown-item {
@@ -147,11 +152,11 @@
     opacity: 0.7;
     color: rgb(0, 0, 0);
 }
-/*
+
 input[type="checkbox"] {
     display: none;
 }
-*/
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -159,3 +164,28 @@ input[type="number"]::-webkit-outer-spin-button {
 h1 {
     font-size: 40px;
 }
+
+.selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 30px;
+    gap: 10px;
+    font-size: 18px;
+    max-width: 310px;
+}
+
+.selected-item {
+    margin-top: 10px;
+    border-radius: 20px;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+    border: none;
+    color: #33333394;
+    display: inline-block;
+}
+
+
+
