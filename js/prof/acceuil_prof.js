@@ -82,3 +82,19 @@ class Popup {
 document.addEventListener('DOMContentLoaded', () => {
     new Popup();
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const modifyButtons = document.querySelectorAll(".modify-evaluation");
+
+    modifyButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const idEvaluation = this.getAttribute("data-evaluation-id");
+            fetch(`edit_form_note.php?id_evaluation=${idEvaluation}`)
+                .then(response => response.text())
+                .then(data => {
+                    const popupContent = document.querySelector(`#popup-modify-${idEvaluation} .popup-content`);
+                    popupContent.innerHTML = data;
+                });
+        });
+    });
+});
