@@ -200,6 +200,48 @@ if (isset($_SESSION['message'])) {
 <!-- FIN containers des popups ajout prof -->
 
 <script src="../../js/admin/card.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const detailButtons = document.querySelectorAll('[data-popup-id="detail_prof"]');
+
+        detailButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const profId = button.getAttribute('data-prof-id');
+                fetch(`edit_prof.php?id=${profId}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('popup-content-detail-prof').innerHTML = data;
+                        document.getElementById('detail_prof').style.display = 'block';
+                    });
+            });
+        });
+
+        const closeButtons = document.querySelectorAll('.popup-close');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                button.closest('.popup').style.display = 'none';
+            });
+        });
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('popup')) {
+                event.target.style.display = 'none';
+            }
+        };
+
+        const message = document.querySelector('.message');
+        if (message) {
+            setTimeout(() => {
+                message.classList.add('hide');
+            }, 2000); // 2 seconds
+
+            // Remove the message from the DOM after the transition ends
+            message.addEventListener('transitionend', () => {
+                message.remove();
+            });
+        }
+    });
+</script>
 </body>
 </html>
 <?php $pdo = null; ?>
