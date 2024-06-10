@@ -96,7 +96,7 @@ if (isset($_SESSION['message'])) {
     </div>
     <div class="navbar">
         <button onclick="window.location.href='page_admin.php'" class="value">Note</button>
-        <button class="value">Profile</button>
+        <button onclick="window.location.href='../page_profile/page_profile_admin.php'" class="value" id="rouge">Profile</button>
         <button onclick="window.location.href='../../PHP/Page_login/logout.php'" class="value" id="rouge">Déconnexion</button>
     </div>
 </div>

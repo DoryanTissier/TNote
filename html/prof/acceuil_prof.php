@@ -63,7 +63,7 @@ $etudiants = $stmt_etudiants->fetchAll(PDO::FETCH_ASSOC);
   </div>
   <div class="navbar">
       <button class="value">Note</button>
-      <button class="value">Profile</button>
+      <a href="../page_profile/page_profile_prof.php" class="value" style="text-decoration: none;">Profil</a>
       <a href="../../PHP/Page_login/logout.php" class="value" style="text-decoration: none;">Déconnexion</a>
   </div>
 </div>
