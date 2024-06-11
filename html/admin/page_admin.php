@@ -116,7 +116,7 @@ if (isset($_SESSION['message'])) {
                     <p>TD{$td['numero_TD']}</p>
                 </div>
                 <div class='card-icons'>
-                    <button class='card-btn'><b>ajouter</b></button>
+                    <button class='card-btn' onclick='redirectToPage({$td['numero_TD']})'><b>ajouter</b></button>
                 </div>
             </div>";
         }
@@ -241,6 +241,10 @@ if (isset($_SESSION['message'])) {
             });
         }
     });
+    function redirectToPage(tdNumber) {
+            // Change the URL as needed
+            window.location.href = 'aj_etudiant.php?td=' + tdNumber;
+        }
 </script>
 </body>
 </html>
