@@ -4,62 +4,40 @@
 TNote est une application web conçue pour la gestion des notes des étudiants. L'application permet aux enseignants de saisir et de gérer les notes des étudiants, aux étudiants de consulter leurs notes et leurs moyennes, et aux administrateurs de gérer les utilisateurs et les ressources.
 
 ## URL du Site
-Le site est hébergé à l'adresse suivante : 
+Le site est hébergé à l'adresse suivante : tnote-uge.alwaysdata.net
 
 ## Sommaire
-- Description
-- URL du Site
-- Fonctionnalités
-- Prérequis
-- Installation
-- Utilisation
-- Structure du Projet
-- Contribuer
+- GitHub
+- Base de données SQL
+- Support de présentation de la soutenance
+- Navigation
 - Auteurs
-- Licence
 
-## Fonctionnalités
-- Gestion des notes par les enseignants (ajout, modification, suppression)
-- Consultation des notes et moyennes par les étudiants
-- Gestion des utilisateurs et des ressources par les administrateurs
-- Importation et exportation des notes
-- Hébergement et mise en ligne du site
 
-## Prérequis
-- Visual Studio Code
-- XAMPP
-- MySQL
 
-## Installation
+## Github
+Lien pour visualiser notre Github : https://github.com/DoryanTissier/TNote/
 
-Clonez le repository :
-```bash
-git clone https://github.com/votre-utilisateur/tnote.git
-cd tnote
-```
 
-Configurez la base de données :
-1. Créez une base de données MySQL nommée `tnote`.
-2. Importez le fichier SQL fourni pour créer les tables nécessaires :
-```bash
-mysql -u votre-utilisateur -p tnote < /path/to/tnote.sql
-```
+## Base de données SQL
 
-Configurez les variables d'environnement :
-Créez un fichier `config.php` à la racine du projet et ajoutez les configurations suivantes :
-```php
-<?php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'votre-utilisateur');
-define('DB_PASS', 'votre-mot-de-passe');
-define('DB_NAME', 'tnote');
-?>
-```
+### MLD
+Profil_etudiant (ID_Etudiants , mot_de_Passe, #ID_groupe, nom, prenom, annee_univ)
+Profil_prof (ID_prof , mot_de_passe, nom, prenom)
+Profil_admin (ID_Admin, nom, prenom, mot_de_Passe)
+Groupe (ID_groupe , annee, effectif, lettre_TP, numero_TD)
+Ressources (num_ressource, nom, coefficient, #nom_UE)
+Liaison_ressources_prof (#id_prof, #num_ressource)
+Liaison_SAE_prof (#id_prof, #nom_SAE)
+SAE (nom_SAE , coefficient)
+Liaison_SAE_UE (#nom_SAE, #nom_UE)
+Evaluation (id_evaluation, type_evaluation, coefficient,  nom_evaluation, date_jour, #ID_porf, #num_ressource, #nom_SAE)
+Note (note, #id_evaluation, #ID_Etudiants)
+UE (nom_UE,  coefficient)
 
-Déplacez les fichiers du projet dans le répertoire racine de votre serveur web (ex: /var/www/html/).  
-Accédez au site via votre navigateur : `http://localhost/tnote`
 
-## Utilisation
+### chemin du fichier .sql
+Il se trouve dans : source/tnote.sql
 
 ### Connexions
 - Étudiant :
@@ -72,8 +50,9 @@ Accédez au site via votre navigateur : `http://localhost/tnote`
   - Identifiant : Admin1.Alice
   - Mot de passe : admin_pwd1
 
-### Fonctionnalités principales
+Si ceux là ne marche pas, il y en à d'autre dans les tables : Profil_etudiant  Profil_prof - Profil_admin
 
+### Fonctionnalités principales
 - Enseignant :
   - Ajouter, modifier et supprimer des notes
   - Importer et exporter des notes
@@ -84,142 +63,27 @@ Accédez au site via votre navigateur : `http://localhost/tnote`
   - Consulter les notes des étudiants
   - Ajouter des pénalités
 
-### Navigation
+
+
+## Support de présentation de la soutenance
+Voici le lien Canva de la présentation : https://www.canva.com/design/DAGHs2jCy1M/8FDfuAX68eWVnq8SIaBjdA/edit?utm_content=DAGHs2jCy1M&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+
+
+## Navigation
 - Page de connexion
 - Tableau de bord selon le rôle (Étudiant, Enseignant, Administrateur)
 - Gestion des notes
 - Gestion des utilisateurs (pour l'administrateur)
 
-## Structure du Projet
+### Fonctionnalités
+- Gestion des notes par les enseignants (ajout, modification, suppression)
+- Consultation des notes et moyennes par les étudiants
+- Gestion des utilisateurs et des ressources par les administrateurs
+- Importation et exportation des notes
+- Hébergement et mise en ligne du site
 
-Voici la structure des répertoires et fichiers principaux du projet :
 
-```css
-TNote/
-    README.txt
-    css/
-        admin.css
-        connexion.css
-        profil.css
-        etudiant.css
-        prof.css
-    html/
-        index.html
-        admin/
-            acceuil_admin.php
-            add_student.php
-            aj_etudiant.php
-            aj_prof.php
-            aj_td.php
-            delete_prof.php
-            delete_student.php
-            delete_td.php
-            edit_prof.php
-            edit_student.php
-            insert_td.php
-            page_admin.php
-            supprimer_td.php
-            td1.php
-            update_prof.php
-            update_student.php
-        etudiant/
-            graphique.html
-        page_profile/
-            edit_mdp.php
-            page_profile_admin.php
-            page_profile_etudiant.php
-            page_profile_prof.php
-        prof/
-            acceuil_prof.php
-            add_note.php
-            edit_form_note.php
-            edit_note.php
-            supp_note.php
-    js/
-        admin/
-            card.js
-            message-succes-modif-etudiant.js
-            script.js
-        connexion/
-            connexion.js
-        prof/
-            acceuil_prof.js
-    PHP/
-        Page_login/
-            db_connect.php
-            login.php
-            logout.php
-    source/
-        tnote.sql
-        george_rounded_font/
-            GeorgeRoundedRegular.ttf
-            GeorgeRoundedSemibold.ttf
-        img/
-            fond/
-                f_admin.png
-                f_etu.png
-                f_prof.png
-            icon/
-                blanc/
-                    ajouter-b.png
-                    ancien-b.png
-                    modif-b.png
-                    suppr-b.png
-                    telecharger-b.png
-                    voir-b.png
-                noir/
-                    ajouter-n.png
-                    ancien-n.png
-                    modif-n.png
-                    suppr-n.png
-                    telecharger-n.png
-                    voir-n.png
-            logo/
-                logo.png
-                logo-nom.png
-                uge.png
-                x.png
-            profile/
-                admin.png
-                e1.png
-                p1.png
-```
-
-## Contribuer
-Pour contribuer au projet, veuillez suivre ces étapes :
-
-1. Fork le projet :
-   - Accédez à la page GitHub du projet.
-   - Cliquez sur le bouton "Fork" en haut à droite pour créer une copie du projet sous votre compte.
-
-2. Clonez votre fork :
-   ```bash
-   git clone https://github.com/votre-utilisateur/tnote.git
-   cd tnote
-   ```
-
-3. Créez une branche :
-   ```bash
-   git checkout -b feature/NouvelleFonctionnalité
-   ```
-
-4. Faites vos modifications dans le projet.
-
-5. Committez vos modifications :
-   ```bash
-   git add .
-   git commit -m 'Ajout de la nouvelle fonctionnalité'
-   ```
-
-6. Poussez la branche :
-   ```bash
-   git push origin feature/NouvelleFonctionnalité
-   ```
-
-7. Ouvrez une Pull Request :
-   - Allez sur la page GitHub de votre fork.
-   - Cliquez sur "Compare & pull request".
-   - Décrivez vos modifications et envoyez la Pull Request.
 
 ## Auteurs
 - Doryan TISSIER
