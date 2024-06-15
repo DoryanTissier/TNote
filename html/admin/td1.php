@@ -13,13 +13,14 @@ error_reporting(E_ALL);
     <title>TD <?php echo $td_number; ?> - Student Table</title>
     <link rel="stylesheet" href="../../css/admin/styles.css">
 </head>
-<body class=".body_details_td">
+<body>
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
         <div class="success-message" id="success-message">
             VOUS AVEZ MODIFIÉ ID : <?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : 'N/A'; ?>
         </div>
     <?php endif; ?>
     <h1 class="titre_td_list">TD <?php echo $td_number; ?> - Liste des étudiants</h1>
+
     <table class="main-table">
         <thead>
             <tr>
@@ -48,7 +49,7 @@ error_reporting(E_ALL);
             if (count($result) > 0) {
                 foreach ($result as $row) {
                     $moyenne = is_null($row['moyenne']) ? 'N/A' : number_format($row['moyenne'], 2);
-                    echo "<tr class='main-row' data-id='{$row['ID_Etudiants']}'>
+                    echo "<tr>
                             <td>{$row['ID_Etudiants']}</td>
                             <td>{$row['nom']}</td>
                             <td>{$row['prenom']}</td>
@@ -57,51 +58,8 @@ error_reporting(E_ALL);
                             <td>{$row['annee_univ']}</td>
                             <td>{$moyenne}</td>
                             <td class='actions'>
-                                <button class='edit'></button>
-                                <button class='delete'></button>
-                                <button class='dropdown'></button>
-                            </td>
-                          </tr>";
-
-                    // Ajouter la table de détails juste après la ligne principale
-                    echo "<tr class='detail-row hidden' data-id='{$row['ID_Etudiants']}'>
-                            <td colspan='8'>
-                                <table class='detail-table'>
-                                    <thead>
-                                        <tr>
-                                            <th>Nom de l'évaluation</th>
-                                            <th>Module</th>
-                                            <th>Type</th>
-                                            <th>Coefficient</th>
-                                            <th>Note</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>";
-                    
-                    $sqlDetails = "SELECT n.note, e.nom_evaluation, e.type_evaluation, e.coefficient 
-                                   FROM Note n
-                                   JOIN Evaluation e ON n.id_evaluation = e.id_evaluation
-                                   WHERE n.ID_Etudiants = ?";
-                    $stmtDetails = $pdo->prepare($sqlDetails);
-                    $stmtDetails->execute([$row['ID_Etudiants']]);
-                    $resultDetails = $stmtDetails->fetchAll();
-
-                    if (count($resultDetails) > 0) {
-                        foreach ($resultDetails as $detailRow) {
-                            echo "<tr>
-                                    <td>{$detailRow['nom_evaluation']}</td>
-                                    <td>Module</td>
-                                    <td>{$detailRow['type_evaluation']}</td>
-                                    <td>{$detailRow['coefficient']}</td>
-                                    <td>{$detailRow['note']}</td>
-                                  </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='5'>Aucune note trouvée</td></tr>";
-                    }
-
-                    echo "        </tbody>
-                                </table>
+                                <button class='edit' data-id='{$row['ID_Etudiants']}'>Edit</button>
+                                <button class='delete' data-id='{$row['ID_Etudiants']}'>Delete</button>
                             </td>
                           </tr>";
                 }
@@ -111,9 +69,17 @@ error_reporting(E_ALL);
             ?>
         </tbody>
     </table>
-    <script src="../../js/admin/script.js"></script>
+
+    <!-- Popup pour edit_student.php -->
+    <div id="edit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close">&times;</span>
+            <div id="edit-popup-content"></div> <!-- Conteneur pour charger dynamiquement le contenu de edit_student.php -->
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const successMessage = document.getElementById('success-message');
             if (successMessage) {
                 setTimeout(() => {
@@ -122,6 +88,88 @@ error_reporting(E_ALL);
                 setTimeout(() => {
                     successMessage.style.display = 'none';
                 }, 2500); // Cache le message après la transition
+            }
+
+            // Fonction pour attacher les événements après chargement du contenu dynamique
+            function attachEventHandlers() {
+                // Initialiser les boutons "edit"
+                document.querySelectorAll('.edit').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Empêche le déclenchement de l'événement click sur la ligne principale
+                        const studentId = this.getAttribute('data-id');
+                        fetch(`edit_student.php?id=${studentId}`)
+                            .then(response => response.text())
+                            .then(data => {
+                                const popupContent = document.getElementById('edit-popup-content');
+                                if (popupContent) {
+                                    popupContent.innerHTML = data;
+                                    document.getElementById('edit-popup').style.display = 'flex';
+                                }
+                            });
+                    });
+                });
+
+                // Initialiser les boutons "delete"
+                document.querySelectorAll('.delete').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Empêche le déclenchement de l'événement click sur la ligne principale
+                        const studentId = this.getAttribute('data-id');
+                        if (confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')) {
+                            fetch(`delete_student.php?id=${studentId}`, { method: 'POST' })
+                                .then(response => response.text())
+                                .then(data => {
+                                    if (data.trim() === 'success') {
+                                        location.reload(); // Recharger la page après la suppression
+                                    } else {
+                                        alert('Erreur lors de la suppression : ' + data);
+                                    }
+                                });
+                        }
+                    });
+                });
+            }
+
+            // Appel initial pour attacher les événements
+            attachEventHandlers();
+
+            // Attacher les événements après chargement du contenu dynamique
+            const cardButtons = document.querySelectorAll('.card');
+            cardButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tdNumber = button.getAttribute('data-td-number');
+                    fetch(`td1.php?td_number=${tdNumber}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            const popupContent = document.getElementById('td-popup-content');
+                            if (popupContent) {
+                                popupContent.innerHTML = data;
+                                document.getElementById('td-popup').style.display = 'block';
+                                // Attacher les événements après l'insertion de contenu
+                                attachEventHandlers();
+                            }
+                        });
+                });
+            });
+
+            // Initialiser les fermetures de popup
+            document.querySelectorAll('.popup-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    const popup = this.closest('.popup');
+                    closePopup(popup);
+                });
+            });
+
+            window.addEventListener('click', (event) => {
+                document.querySelectorAll('.popup').forEach(popup => {
+                    if (event.target === popup) {
+                        closePopup(popup);
+                    }
+                });
+            });
+
+            function closePopup(popup) {
+                popup.classList.remove('open');
+                setTimeout(() => popup.style.display = 'none', 300);
             }
         });
     </script>

@@ -1,83 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const mainRows = document.querySelectorAll('.main-row');
-    
-    mainRows.forEach(mainRow => {
-        const id = mainRow.getAttribute('data-id');
-        const detailRow = document.querySelector(`.detail-row[data-id="${id}"]`);
+    const openPopup = (popupId) => {
+        const popup = document.getElementById(popupId);
+        if (popup) {
+            popup.style.display = 'block';
+            setTimeout(() => popup.classList.add('open'), 10);
+        }
+    };
 
-        mainRow.addEventListener('click', () => {
-            if (detailRow) {
-                detailRow.classList.toggle('hidden');
-                detailRow.style.display = detailRow.classList.contains('hidden') ? 'none' : 'table-row';
-            }
-        });
+    const closePopup = (popup) => {
+        popup.classList.remove('open');
+        setTimeout(() => popup.style.display = 'none', 300);
+    };
 
-        const editButton = mainRow.querySelector('.edit');
-        editButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Pour empêcher l'événement de clic de se propager
-            openEditPopup(id);
-        });
+    const openAjEtudiantPopup = (tdNumber) => {
+        const popup = document.getElementById('aj-etudiant-popup');
+        const iframe = document.getElementById('aj-etudiant-iframe');
+        iframe.src = 'aj_etudiant.php?td=' + tdNumber;
+        openPopup('aj-etudiant-popup');
+    };
 
-        const deleteButton = mainRow.querySelector('.delete');
-        deleteButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Pour empêcher l'événement de clic de se propager
-            const confirmation = confirm("Voulez-vous vraiment supprimer cet étudiant ?");
-            if (confirmation) {
-                // Envoi de la requête AJAX pour supprimer l'entrée de la base de données
-                fetch('delete_student.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `id=${id}`
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Response:', data); // Ajoutez ceci pour déboguer
-                    if (data.includes('success')) {
-                        mainRow.remove();
-                        if (detailRow) {
-                            detailRow.remove();
-                        }
-                    } else {
-                        alert('Erreur lors de la suppression de l\'étudiant.');
-                        console.error('Error:', data); // Ajoutez ceci pour voir l'erreur complète
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                });
+    document.querySelectorAll('.card, .aj').forEach(element => {
+        element.addEventListener('click', (event) => {
+            const popupId = event.currentTarget.getAttribute('data-popup-id');
+            const tdNumber = event.currentTarget.getAttribute('data-td-number');
+            if (tdNumber) {
+                fetch(`td1.php?td_number=${tdNumber}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('td-popup-content').innerHTML = data;
+                        openPopup(popupId);
+                    });
+            } else {
+                openPopup(popupId);
             }
         });
     });
 
-    // Fonction pour ouvrir le popup d'édition
-    function openEditPopup(studentId) {
-        fetch(`edit_student.php?id=${studentId}`)
-            .then(response => response.text())
-            .then(data => {
-                const editPopup = document.createElement('div');
-                editPopup.classList.add('popup');
-                editPopup.innerHTML = `
-                    <div class="popup-content">
-                        <span class="popup-close">&times;</span>
-                        <div class="popup-body">${data}</div>
-                    </div>
-                `;
-                document.body.appendChild(editPopup);
+    document.querySelectorAll('.card-btn').forEach(element => {
+        element.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const tdNumber = element.getAttribute('data-td-number');
+            if (tdNumber) {
+                openAjEtudiantPopup(tdNumber);
+            } else {
+                const popupId = event.currentTarget.getAttribute('data-popup-id');
+                openPopup(popupId);
+            }
+        });
+    });
 
-                // Fermer le popup lorsque le bouton de fermeture est cliqué
-                editPopup.querySelector('.popup-close').addEventListener('click', () => {
-                    document.body.removeChild(editPopup);
-                });
+    document.querySelectorAll('.popup-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', () => {
+            const popup = closeBtn.closest('.popup');
+            closePopup(popup);
+        });
+    });
 
-                // Fermer le popup lorsque l'extérieur du contenu du popup est cliqué
-                window.addEventListener('click', (event) => {
-                    if (event.target === editPopup) {
-                        document.body.removeChild(editPopup);
-                    }
-                });
-            })
-            .catch(error => console.error('Erreur:', error));
-    }
+    window.addEventListener('click', (event) => {
+        document.querySelectorAll('.popup').forEach(popup => {
+            if (event.target === popup) {
+                closePopup(popup);
+            }
+        });
+    });
 });

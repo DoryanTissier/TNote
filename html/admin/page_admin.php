@@ -14,13 +14,18 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Récupérer les informations des TDs
-$sql_td = "SELECT numero_TD FROM Groupe GROUP BY numero_TD";
+$sql_td = "SELECT numero_TD, lettre_TP FROM Groupe GROUP BY numero_TD, lettre_TP";
 $stmt_td = $pdo->query($sql_td);
 
 $tds = [];
+$tds_tp = [];
 if ($stmt_td->rowCount() > 0) {
     while ($row = $stmt_td->fetch()) {
-        $tds[] = $row;
+        $tds[$row['numero_TD']][] = $row['lettre_TP'];
+        if (!in_array($row['numero_TD'], $tds_tp)) {
+            $tds_tp[$row['numero_TD']] = [];
+        }
+        $tds_tp[$row['numero_TD']][] = $row['lettre_TP'];
     }
 }
 
@@ -75,6 +80,11 @@ if ($stmt_prof->rowCount() > 0) {
         .message.hide {
             opacity: 0;
         }
+        .popup-content iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -109,14 +119,15 @@ if (isset($_SESSION['message'])) {
 <div class="card-container">
     <?php
     if (!empty($tds)) {
-        foreach ($tds as $td) {
+        foreach ($tds as $numero_TD => $lettres_TP) {
             echo "
-            <div class='card' data-popup-id='td-popup' data-td-number='{$td['numero_TD']}'>
+            <div class='card' data-popup-id='td-popup' data-td-number='{$numero_TD}'>
                 <div class='card-text' id='card-text'>
-                    <p>TD{$td['numero_TD']}</p>
+                    <p>TD{$numero_TD}</p>
                 </div>
                 <div class='card-icons'>
-                    <button class='card-btn' onclick='redirectToPage({$td['numero_TD']})'><b>ajouter</b></button>
+                    <button class='card-btn' data-popup-id='aj_etudiant' data-td-number='{$numero_TD}' data-tp-letters='".json_encode($lettres_TP)."'><b>ajouter</b></button>
+                    <button class='card-btn' onclick='supprimerTD({$numero_TD})'><b>supprimer</b></button>
                 </div>
             </div>";
         }
@@ -132,6 +143,16 @@ if (isset($_SESSION['message'])) {
 </div>
 <br>
 <!-- FIN conteneur pour aligner les cartes des TD -->
+
+<!-- Containers des popups ajout étudiant -->
+<div id="aj_etudiant" class="popup">
+    <div class="popup-content">
+        <span class="popup-close">&times;</span>
+        <?php include 'aj_etudiant.php'; ?>
+    </div>
+</div>
+<!-- FIN containers des popups ajout étudiant -->
+
 
 <!-- Conteneur pour aligner les cartes des professeur(e)s -->
 <h1>Professeur(e)s</h1>
@@ -202,7 +223,50 @@ if (isset($_SESSION['message'])) {
 <script src="../../js/admin/card.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const cardButtons = document.querySelectorAll('.card');
+        const addButtons = document.querySelectorAll('[data-popup-id="aj_etudiant"]');
         const detailButtons = document.querySelectorAll('[data-popup-id="detail_prof"]');
+        const closeButtons = document.querySelectorAll('.popup-close');
+        const message = document.querySelector('.message');
+
+        cardButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tdNumber = button.getAttribute('data-td-number');
+                fetch(`td1.php?td_number=${tdNumber}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        const popupContent = document.getElementById('td-popup-content');
+                        if (popupContent) {
+                            popupContent.innerHTML = data;
+                            document.getElementById('td-popup').style.display = 'block';
+                            // Attacher les événements après l'insertion de contenu
+                            attachEventHandlers();
+                        }
+                    });
+            });
+        });
+
+        addButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tdNumber = button.getAttribute('data-td-number');
+                const tpLetters = JSON.parse(button.getAttribute('data-tp-letters'));
+                
+                document.getElementById('td').value = tdNumber;
+                updateLabel('td'); // Mise à jour du label si nécessaire
+
+                const tpSelect = document.getElementById('tp');
+                tpSelect.innerHTML = ''; // Clear previous options
+
+                tpLetters.forEach(letter => {
+                    const option = document.createElement('option');
+                    option.value = letter;
+                    option.textContent = letter;
+                    tpSelect.appendChild(option);
+                });
+
+                document.getElementById('aj_etudiant').style.display = 'block';
+            });
+        });
 
         detailButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -216,20 +280,21 @@ if (isset($_SESSION['message'])) {
             });
         });
 
-        const closeButtons = document.querySelectorAll('.popup-close');
         closeButtons.forEach(button => {
             button.addEventListener('click', function() {
-                button.closest('.popup').style.display = 'none';
+                const popup = button.closest('.popup');
+                closePopup(popup);
             });
         });
 
-        window.onclick = function(event) {
-            if (event.target.classList.contains('popup')) {
-                event.target.style.display = 'none';
-            }
-        };
+        window.addEventListener('click', (event) => {
+            document.querySelectorAll('.popup').forEach(popup => {
+                if (event.target === popup) {
+                    closePopup(popup);
+                }
+            });
+        });
 
-        const message = document.querySelector('.message');
         if (message) {
             setTimeout(() => {
                 message.classList.add('hide');
@@ -241,10 +306,84 @@ if (isset($_SESSION['message'])) {
             });
         }
     });
-    function redirectToPage(tdNumber) {
-            // Change the URL as needed
-            window.location.href = 'aj_etudiant.php?td=' + tdNumber;
+
+    function closePopup(popup) {
+        popup.classList.remove('open');
+        setTimeout(() => popup.style.display = 'none', 300);
+    }
+
+    function supprimerTD(tdNumber) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce TD et toutes les données associées ?')) {
+            window.location.href = `supprimer_td.php?td_number=${tdNumber}`;
         }
+    }
+
+    function redirectToPage(tdNumber) {
+        // Change the URL as needed
+        window.location.href = 'aj_etudiant.php?td=' + tdNumber;
+    }
+
+    function updateLabel(id) {
+        const input = document.getElementById(id);
+        if (input.value.trim() !== "") {
+            input.classList.add('not-empty');
+        } else {
+            input.classList.remove('not-empty');
+        }
+    }
+
+    // Fonction pour initialiser les toggles des détails après l'insertion de contenu via AJAX
+    function initializeDetailToggle() {
+        const mainRows = document.querySelectorAll('.main-row');
+        mainRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const detailRow = document.querySelector(`.detail-row[data-id='${row.getAttribute('data-id')}']`);
+                if (detailRow.style.display === 'none' || detailRow.style.display === '') {
+                    detailRow.style.display = 'table-row';
+                } else {
+                    detailRow.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    function attachEventHandlers() {
+        // Initialiser les boutons "edit"
+        document.querySelectorAll('.edit').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Empêche le déclenchement de l'événement click sur la ligne principale
+                const studentId = this.getAttribute('data-id');
+                fetch(`edit_student.php?id=${studentId}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        const popupContent = document.getElementById('edit-popup-content');
+                        if (popupContent) {
+                            popupContent.innerHTML = data;
+                            document.getElementById('edit-popup').style.display = 'flex';
+                        }
+                    });
+            });
+        });
+
+        // Initialiser les boutons "delete"
+        document.querySelectorAll('.delete').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Empêche le déclenchement de l'événement click sur la ligne principale
+                const studentId = this.getAttribute('data-id');
+                if (confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')) {
+                    fetch(`delete_student.php?id=${studentId}`, { method: 'POST' })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data.trim() === 'success') {
+                                location.reload(); // Recharger la page après la suppression
+                            } else {
+                                alert('Erreur lors de la suppression : ' + data);
+                            }
+                        });
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>

@@ -187,5 +187,41 @@ h1 {
     display: inline-block;
 }
 
+.block-modif-admin {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 100px;
 
+}
 
+.input-aj-td-prof-etudiant select {
+    padding: 20px 15px 10px 15px;
+    outline: none;
+    border: none;
+    border-radius: 50px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 16px;
+    font-weight: 550;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 0 0 5px transparent;
+    width: 300px; /* Définit la largeur */
+    appearance: none; /* Supprime le style par défaut de la flèche */
+}
+.input-aj-td-prof-etudiant select:hover,
+.input-aj-td-prof-etudiant select:focus {
+    box-shadow: 0 0 0 2px #33333394;
+}
+.input-aj-td-prof-etudiant select:focus + span,
+.input-aj-td-prof-etudiant select:valid + span,
+.input-aj-td-prof-etudiant select.not-empty + span {
+    transform: translateY(-35px) translateX(-5px) scale(0.95);
+    transition: 0.3s ease-in-out;
+}

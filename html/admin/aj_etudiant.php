@@ -26,11 +26,13 @@
                 <span>Identifiant</span>
             </div>
             <div class="input-aj-td-prof-etudiant">
-                <input type="text" id="tp" name="tp" required>
+                <select id="tp" name="tp" required>
+                    <option value="" disabled selected>Choisissez un TP</option>
+                </select>
                 <span>TP</span>
             </div>
             <div class="input-aj-td-prof-etudiant">
-                <input type="number" id="td" name="td" required>
+                <input type="number" id="td" name="td" readonly>
                 <span>TD</span>
             </div>
             <div class="input-aj-td-prof-etudiant">
@@ -97,7 +99,3 @@
 </script>
 </body>
 </html>
-
-
-
-
