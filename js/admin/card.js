@@ -20,8 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(`td1.php?td_number=${tdNumber}`)
                     .then(response => response.text())
                     .then(data => {
-                        document.getElementById('td-popup-content').innerHTML = data;
-                        openPopup(popupId);
+                        const popupContent = document.getElementById('td-popup-content');
+                        if (popupContent) {
+                            popupContent.innerHTML = data;
+                            openPopup(popupId);
+                        }
                     });
             } else {
                 openPopup(popupId);

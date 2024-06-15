@@ -1,42 +1,54 @@
 <?php
+session_start();
 include_once '../../PHP/Page_login/db_connect.php'; // Utiliser le bon chemin pour inclure db_connect.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     $id = $_POST['id'];
 
     try {
-        // Commencer la transaction
+        // Commencer une transaction
         $pdo->beginTransaction();
 
-        // Supprimer les ressources associées au professeur
-        $sql_delete_ressources = "DELETE FROM Liaison_ressources_prof WHERE id_prof = ?";
-        $stmt_delete_ressources = $pdo->prepare($sql_delete_ressources);
-        $stmt_delete_ressources->execute([$id]);
+        // Supprimer les notes associées aux évaluations du professeur
+        $stmt = $pdo->prepare("DELETE n FROM Note n
+                               JOIN Evaluation e ON n.id_evaluation = e.id_evaluation
+                               WHERE e.ID_prof = ?");
+        $stmt->execute([$id]);
 
-        // Supprimer les SAE associées au professeur
-        $sql_delete_sae = "DELETE FROM Liaison_SAE_prof WHERE id_prof = ?";
-        $stmt_delete_sae = $pdo->prepare($sql_delete_sae);
-        $stmt_delete_sae->execute([$id]);
+        // Supprimer les évaluations liées à ce professeur
+        $stmt = $pdo->prepare("DELETE FROM Evaluation WHERE ID_prof = ?");
+        $stmt->execute([$id]);
 
-        // Supprimer le professeur
-        $sql_delete_prof = "DELETE FROM Profil_prof WHERE ID_prof = ?";
-        $stmt_delete_prof = $pdo->prepare($sql_delete_prof);
-        $stmt_delete_prof->execute([$id]);
+        // Supprimer les liaisons avec les ressources
+        $stmt = $pdo->prepare("DELETE FROM Liaison_ressources_prof WHERE id_prof = ?");
+        $stmt->execute([$id]);
+
+        // Supprimer les liaisons avec les SAE
+        $stmt = $pdo->prepare("DELETE FROM Liaison_SAE_prof WHERE id_prof = ?");
+        $stmt->execute([$id]);
+
+        // Supprimer le profil du professeur
+        $stmt = $pdo->prepare("DELETE FROM Profil_prof WHERE ID_prof = ?");
+        $stmt->execute([$id]);
 
         // Valider la transaction
         $pdo->commit();
 
-        header("Location: page_admin.php");
-        exit();
+        $_SESSION['message'] = "Professeur supprimé avec succès.";
+        $_SESSION['message_type'] = "success";
     } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
         $pdo->rollBack();
-        echo "Erreur : " . $e->getMessage();
+        $_SESSION['message'] = "Erreur lors de la suppression du professeur : " . $e->getMessage();
+        $_SESSION['message_type'] = "error";
     }
+
+    header("Location: page_admin.php");
+    exit();
 } else {
-    echo "ID de professeur non spécifié.";
+    $_SESSION['message'] = "Requête invalide.";
+    $_SESSION['message_type'] = "error";
+    header("Location: page_admin.php");
     exit();
 }
 ?>

@@ -5,36 +5,42 @@ include_once '../../PHP/Page_login/db_connect.php'; // Utiliser le bon chemin po
 // Vérifiez si les données du formulaire sont envoyées
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name_td = $_POST['name_td'];
-    $effectif_a = $_POST['effectif_a'];
-    $effectif_b = $_POST['effectif_b'];
+    $letters = range(strtolower($_POST['letter_a']), strtolower($_POST['letter_b']));
+    $error = false;
 
-    // Validation des données (ajoutez d'autres validations selon vos besoins)
-    if (empty($name_td) || empty($effectif_a) || empty($effectif_b)) {
+    // Validation des données
+    if (empty($name_td) || empty($letters)) {
         $_SESSION['message'] = "Tous les champs sont obligatoires.";
         $_SESSION['message_type'] = "error";
-    } else {
+        $error = true;
+    }
+
+    // Validation des effectifs
+    foreach ($letters as $letter) {
+        if (empty($_POST['effectif_' . $letter])) {
+            $_SESSION['message'] = "Tous les champs d'effectifs sont obligatoires.";
+            $_SESSION['message_type'] = "error";
+            $error = true;
+            break;
+        }
+    }
+
+    if (!$error) {
         try {
             // Commencer la transaction
             $pdo->beginTransaction();
 
-            // Insérez les données dans la base de données pour l'effectif A
-            $stmt_a = $pdo->prepare("INSERT INTO Groupe (numero_TD, effectif, lettre_TP) VALUES (?, ?, 'a')");
-            $stmt_a->execute([$name_td, $effectif_a]);
-
-            // Insérez les données dans la base de données pour l'effectif B
-            $stmt_b = $pdo->prepare("INSERT INTO Groupe (numero_TD, effectif, lettre_TP) VALUES (?, ?, 'b')");
-            $stmt_b->execute([$name_td, $effectif_b]);
+            foreach ($letters as $letter) {
+                $effectif = $_POST['effectif_' . $letter];
+                $stmt = $pdo->prepare("INSERT INTO Groupe (numero_TD, effectif, lettre_TP) VALUES (?, ?, ?)");
+                $stmt->execute([$name_td, $effectif, $letter]);
+            }
 
             // Valider la transaction
             $pdo->commit();
 
-            if ($stmt_a->rowCount() > 0 && $stmt_b->rowCount() > 0) {
-                $_SESSION['message'] = "Nouveaux TDs ajoutés avec succès.";
-                $_SESSION['message_type'] = "success";
-            } else {
-                $_SESSION['message'] = "Erreur lors de l'ajout des TDs.";
-                $_SESSION['message_type'] = "error";
-            }
+            $_SESSION['message'] = "Nouveaux TDs ajoutés avec succès.";
+            $_SESSION['message_type'] = "success";
         } catch (Exception $e) {
             // Annuler la transaction en cas d'erreur
             $pdo->rollBack();
