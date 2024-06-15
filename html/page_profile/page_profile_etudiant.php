@@ -3,7 +3,7 @@ session_start();
 include '../../PHP/Page_login/db_connect.php';
 
 // Vérifie si l'utilisateur est connecté
-if (!isset($_SESSION['user_id']) || $_SESSION['profile_type'] !== 'professeur') {
+if (!isset($_SESSION['user_id']) || $_SESSION['profile_type'] !== 'etudiant') {
     // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
     header("Location: ../../PHP/Page_login/login.php");
     exit();
@@ -24,8 +24,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['profile_type'] !== 'professeur') 
           <img class="logo" src="../../source/img/logo/logo-nom.png" alt="logo">
       </div>
       <div class="navbar">
-          <a class="value" >Note</a>
-          <a class="value" >Profile</a>
+          <a href="../etudiant/acceuil_etudiant.php" class="value" style="text-decoration: none;">Note</a>
+          <a class="value">Profile</a>
           <a href="../../PHP/Page_login/logout.php" class="value" style="text-decoration: none;">Déconnexion</a>
       </div>
     </div>

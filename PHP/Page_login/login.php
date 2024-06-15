@@ -8,7 +8,7 @@ $error = null;
 if (isset($_SESSION['profile_type'])) {
     switch ($_SESSION['profile_type']) {
         case 'etudiant':
-            header("Location: ../../html/etudiant/acceuil_prof.php");
+            header("Location: ../../html/etudiant/acceuil_etudiant.php");
             exit();
         case 'professeur':
             header("Location: ../../html/prof/acceuil_prof.php");
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         // Redirection vers la page appropriée
                         switch ($profile_type) {
                             case 'etudiant':
-                                header("Location: ../../html/etudiant/acceuil_prof.php");
+                                header("Location: ../../html/etudiant/acceuil_etudiant.php");
                                 break;
                             case 'professeur':
                                 header("Location: ../../html/prof/acceuil_prof.php");

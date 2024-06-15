@@ -27,7 +27,7 @@ if (!$etudiant) {
 
 // Requête SQL pour récupérer les notes de l'étudiant connecté
 $sql_notes = "SELECT ID_Etudiants, note
-              FROM note
+              FROM Note
               WHERE ID_Etudiants = :id_p
               ORDER BY ID_Etudiants";
 $stmt_notes = $pdo->prepare($sql_notes);
@@ -41,6 +41,7 @@ $notes = $stmt_notes->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes de l'Étudiant</title>
+    <link rel="stylesheet" href="../../css/etudiant/etudiant_header.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,6 +82,17 @@ $notes = $stmt_notes->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
+
+<div class="header">
+  <div class="dlogo">
+      <img class="logo" src="../../source/img/logo/logo-nom.png" alt="logo">
+  </div>
+  <div class="navbar">
+      <button class="value">Note</button>
+      <a href="../page_profile/page_profile_etudiant.php" class="value" style="text-decoration: none;">Profil</a>
+      <a href="../../PHP/Page_login/logout.php" class="value" style="text-decoration: none;">Déconnexion</a>
+  </div>
+</div>
 
 <h2>Notes de <?php echo htmlspecialchars($etudiant['prenom'] . ' ' . $etudiant['nom']); ?></h2>
 
